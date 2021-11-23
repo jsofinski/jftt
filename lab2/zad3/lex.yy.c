@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 6
-#define YY_END_OF_BUFFER 7
+#define YY_NUM_RULES 10
+#define YY_END_OF_BUFFER 11
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -360,28 +360,29 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[14] =
+static const flex_int16_t yy_accept[27] =
     {   0,
-        2,    2,    7,    5,    4,    3,    1,    1,    1,    2,
-        1,    2,    0
+        0,    0,   11,    9,    8,    1,    9,    9,    9,    5,
+        0,    4,    6,    0,    7,    0,    3,    0,    2,    0,
+        0,    0,    0,    4,    6,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    1,    1,    1,    1,    4,    1,    5,    1,
-        1,    4,    4,    1,    6,    1,    4,    7,    7,    7,
-        7,    7,    7,    7,    7,    7,    7,    1,    1,    1,
+        1,    1,    3,    4,    1,    1,    1,    1,    1,    1,
+        1,    5,    1,    1,    1,    1,    6,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    7,
+        1,    8,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    4,    1,    1,    1,    1,    1,    1,
+        1,    9,    1,    1,    1,    1,    1,    1,    1,    1,
 
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    8,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -398,35 +399,41 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[9] =
+static const YY_CHAR yy_meta[10] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1
+        1,    1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[14] =
+static const flex_int16_t yy_base[27] =
     {   0,
-        0,    0,   13,   14,   14,   14,   14,    5,    4,    3,
-       14,    2,   14
+        0,    0,   27,   35,   35,   35,    4,    9,   22,   35,
+       21,   16,   23,   20,   35,   15,   35,   15,   35,   14,
+       28,    3,    2,    0,    0,   35
     } ;
 
-static const flex_int16_t yy_def[14] =
+static const flex_int16_t yy_def[27] =
     {   0,
-       13,    1,   13,   13,   13,   13,   13,   13,   13,   13,
-       13,   13,    0
+       26,    1,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   12,   13,   22,   23,    0
     } ;
 
-static const flex_int16_t yy_nxt[23] =
+static const flex_int16_t yy_nxt[45] =
     {   0,
-        4,    5,    6,    7,    8,    9,   10,   11,   12,   12,
-       12,   12,   13,    3,   13,   13,   13,   13,   13,   13,
-       13,   13
+        4,    5,    4,    6,    7,    8,    6,    6,    9,   10,
+       26,   26,   11,   12,   13,   23,   22,   14,   17,   10,
+       17,   21,   16,   15,   18,   19,   26,   26,   19,   26,
+       26,   20,   24,   25,    3,   26,   26,   26,   26,   26,
+       26,   26,   26,   26
     } ;
 
-static const flex_int16_t yy_chk[23] =
+static const flex_int16_t yy_chk[45] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,   12,   10,
-        9,    8,    3,   13,   13,   13,   13,   13,   13,   13,
-       13,   13
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    7,
+       23,   22,    7,    8,    8,   20,   18,    8,   12,   16,
+       12,   14,   11,    9,   12,   13,    3,    0,   13,    0,
+        0,   13,   21,   21,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -443,21 +450,17 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "zad4.l"
-#line 2 "zad4.l"
+#line 1 "zad3.l"
+#line 2 "zad3.l"
     /*Definition section */
-    char stackChar[1000];
-    char *scp;
-    int stackNumber[1000];
-    int *snp;
-    int result = 0;
-    int error = 0; // 0 = ok; 1 = za mało operatorow; 2 = zły znak
-    char wrongSymbol = ' ';
-    int countNumbers = 0;
-    #define push(sp, n) (*((sp)++) = (n))
-    #define pop(sp) (*--(sp))
-#line 460 "lex.yy.c"
-#line 461 "lex.yy.c"
+
+    int inString = 0;
+    int singleLineComment = 0;      // // 
+    int multipleLineComment = 0;    // /* */
+    int docSingleLineComment = 0;   // ///    or //!
+    int docmultipleLineComment = 0; // /** */ or /*! */
+#line 463 "lex.yy.c"
+#line 464 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -674,9 +677,9 @@ YY_DECL
 		}
 
 	{
-#line 16 "zad4.l"
+#line 12 "zad3.l"
 
-#line 680 "lex.yy.c"
+#line 683 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -703,13 +706,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 14 )
+				if ( yy_current_state >= 27 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 14 );
+		while ( yy_base[yy_current_state] != 35 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -735,36 +738,62 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 17 "zad4.l"
-{inputSymbol(yytext);}
+#line 13 "zad3.l"
+{stringHandler(yytext);}
 	YY_BREAK
 case 2:
+/* rule 2 can match eol */
 YY_RULE_SETUP
-#line 18 "zad4.l"
-{inputNumber(yytext);}
+#line 14 "zad3.l"
+{docSingleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 19 "zad4.l"
-{handleInput();}
+#line 15 "zad3.l"
+{docmultipleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 4:
+/* rule 4 can match eol */
 YY_RULE_SETUP
-#line 20 "zad4.l"
-{printf("%s", yytext); fprintf(yyout, "%s", yytext);}
+#line 16 "zad3.l"
+{multipleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 5:
+/* rule 5 can match eol */
 YY_RULE_SETUP
-#line 21 "zad4.l"
-{printf("%s", yytext); fprintf(yyout, "%s", yytext); wrongSymbol=yytext[0]; error = 2;}
+#line 17 "zad3.l"
+{docmultipleLineCommentHandler(0, yytext); multipleLineCommentHandler(0, "");}
 	YY_BREAK
 case 6:
+/* rule 6 can match eol */
 YY_RULE_SETUP
-#line 22 "zad4.l"
+#line 18 "zad3.l"
+{singleLineCommentHandler(1, yytext);}
+	YY_BREAK
+case 7:
+/* rule 7 can match eol */
+YY_RULE_SETUP
+#line 19 "zad3.l"
+{printf("slash\n");}
+	YY_BREAK
+case 8:
+/* rule 8 can match eol */
+YY_RULE_SETUP
+#line 20 "zad3.l"
+{singleLineCommentHandler(0, yytext); docSingleLineCommentHandler(0, "");everythingElseHandler(yytext);}
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 21 "zad3.l"
+{everythingElseHandler(yytext);}
+	YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 22 "zad3.l"
 ECHO;
 	YY_BREAK
-#line 768 "lex.yy.c"
+#line 797 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1061,7 +1090,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 14 )
+			if ( yy_current_state >= 27 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1089,11 +1118,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 14 )
+		if ( yy_current_state >= 27 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 13);
+	yy_is_jam = (yy_current_state == 26);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1769,109 +1798,98 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 22 "zad4.l"
+#line 22 "zad3.l"
 
   
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-
 int yywrap(){}
 
-int inputNumber(char* input) {
-    countNumbers++;
-    fprintf(yyout, "%s", yytext); 
-    int value = atoi(input);
-    printf("%d", value);
-    push(snp, value);
-}
-int inputSymbol(char* input) {
-    fprintf(yyout, "%s", yytext); 
-    printf("%s", input);
-    char symbol = input[0];
-    // push(scp, input[0]);
-    // tutej będą obliczenia 
 
-    int a = pop(snp);
-    int b = pop(snp);
-    countNumbers--;
-
-    if (countNumbers < 1) {
-        error = 1;
+int everythingElseHandler(char* text) {
+    if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        fprintf(yyout, "%s", text);
     }
     
-    if(symbol == '+') {
-        // printf("dodawanie\n");
-        push(snp, b+a);
+}
+
+int stringHandler(char* text) {
+    if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment && !inString) {
+        inString = 1;
+        fprintf(yyout, "%s", text);
     }
-    else if(symbol == '-'){
-        // printf("odejmowanie\n");
-        push(snp, b-a);
-    }
-    else if(symbol == '*'){
-        // printf("mnożenie\n");
-        push(snp, b*a);
-    }
-    else if(symbol == '/'){
-        push(snp, b/a);
-    }
-    else if(symbol == '^'){
-        push(snp, (int)pow((double)b, (double)a));
-    }
-    else if(symbol == '%'){
-        push(snp, b%a);
-    }
-    else {
-        printf("dupa\n");
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment && inString) {
+        inString = 0;
+        fprintf(yyout, "%s", text);
     }
 }
-int handleInput() {
-    if (error == 1) {
-        printf("\nBłąd: za mała liczba argumentów\n");
-            fprintf(yyout, "\nBłąd: za mała liczba argumentów\n");
-        countNumbers = 0;
+int singleLineCommentHandler(int begin, char* text) {
+    if (inString) {
+        fprintf(yyout, "%s", text);
     }
-    else if (error == 2) {
-        printf("\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
-        fprintf(yyout, "\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
-    }
-    else {
-        int value = pop(snp);
-        int test = pop(snp);
-        // printf("countNumbers: %d\n", countNumbers);
-        if (countNumbers > 1) {
-            error = 1;
-            printf("\nBłąd: za mała liczba operatorów\n");
-            fprintf(yyout, "\nBłąd: za mała liczba operatorów\n");
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 1) {
+            singleLineComment = 1;
         }
-        else {
-            countNumbers = 0;
-            printf("\n = %d\n", value);
-            fprintf(yyout, "\n = %d\n", value);
-        }   
     }
-    error = 0;
+    else if (singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 0) {
+            singleLineComment = 0;
+        }
+    }            
+}
+int multipleLineCommentHandler(int begin, char* text) {
+    if (inString) {
+        fprintf(yyout, "%s", text);
+    }
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 1) {
+            multipleLineComment = 1;
+        }
+    }
+    else if (!singleLineComment && multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 0) {
+            multipleLineComment = 0;
+        }
+    }
+}
+int docSingleLineCommentHandler(int begin, char* text) {
+    if (inString) {
+        fprintf(yyout, "%s", text);
+    }
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 1) {
+            docSingleLineComment = 1;
+        }
+    }
+    else if (!singleLineComment && !multipleLineComment && docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 0) {
+            docSingleLineComment = 0;
+        }
+    }
+}
+int docmultipleLineCommentHandler(int begin, char* text) {
+    if (inString) {
+        fprintf(yyout, "%s", text);
+    }
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        if (begin == 1) {
+            docmultipleLineComment = 1;
+        }
+    }
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && docmultipleLineComment) {
+        if (begin == 0) {
+            docmultipleLineComment = 0;
+        }
+    }
 }
 
 // driver code 
-int main() {
-    /* yyin and yyout as pointer
-    of File type */
-    extern FILE *yyin, *yyout;
+int main()
+{
   
-    /* yyin points to the file input.txt
-    and opens it in read mode*/
     yyin = fopen("input.txt", "r");
   
-    /* yyout points to the file output.txt
-    and opens it in write mode*/
     yyout = fopen("Output.txt", "w");
   
-
-    scp = stackChar;
-    
-    snp = stackNumber;
-    
     yylex();
     return 0;
 }

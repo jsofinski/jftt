@@ -1,5 +1,7 @@
 %{
     /*Definition section */
+    int xmlDeclaration = 0;
+    int withinAttribute = 0;
 %}
   
 /* 
@@ -10,8 +12,9 @@ Comments cannot be nested inside the other comments.
 */
 
 %%
+"<?xml"[.]*"?>" {fprintf(yyout, "%s", yytext); xmlDeclaration = 1; printf("just go xml declaration\n");}
 ^[\t|' ']*"<!--"[a-zA-Z|' '|\t^'-']*"-->"[\n]    {fprintf(yyout, "");} //empty lines
-.       {fprintf(yyout, "%s", yytext); }
+.               {fprintf(yyout, "%s", yytext); }
 %%
   
 int yywrap(){}
