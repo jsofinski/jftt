@@ -16,3 +16,17 @@ Błąd: za mała liczba operatorów
 Błąd: zły symbol "."
 1 3 ^ 6 * 6 /
  = 1
+2 0 /
+Błąd: dzielenie przez zero
+2 0 %
+Błąd: dzielenie przez zero
+0 0 /
+Błąd: dzielenie przez zero
+4 2 3 + *
+ = 20
+5 5 + + 5 5 -
+Błąd: za mała liczba argumentów
+5 5 + + 5 5 - -
+Błąd: za mała liczba argumentów
+11 5 %
+ = 1

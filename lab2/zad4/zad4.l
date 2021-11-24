@@ -64,13 +64,23 @@ int inputSymbol(char* input) {
         push(snp, b*a);
     }
     else if(symbol == '/'){
-        push(snp, b/a);
+        if (a == 0) {
+            error = 3;
+        }
+        else {
+            push(snp, b/a);
+        }
     }
     else if(symbol == '^'){
         push(snp, (int)pow((double)b, (double)a));
     }
     else if(symbol == '%'){
-        push(snp, b%a);
+        if (a == 0) {
+            error = 3;
+        }
+        else {
+            push(snp, b%a);
+        }
     }
     else {
         printf("dupa\n");
@@ -85,6 +95,11 @@ int handleInput() {
     else if (error == 2) {
         printf("\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
         fprintf(yyout, "\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
+        countNumbers = 0;
+    }
+    else if (error == 3) {
+        printf("\nBłąd: dzielenie przez zero\n");
+        fprintf(yyout, "\nBłąd: dzielenie przez zero\n");
         countNumbers = 0;
     }
     else {
