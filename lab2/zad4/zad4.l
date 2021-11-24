@@ -1,5 +1,6 @@
 %{
     /*Definition section */
+    #include "header.h"
     char stackChar[1000];
     char *scp;
     int stackNumber[1000];
@@ -17,6 +18,7 @@
 ['+'|'\-'|'*'|'/'|'^'|'%']  {inputSymbol(yytext);}
 ['\-']?[0-9]*               {inputNumber(yytext);}
 [\n]                        {handleInput();}
+<<EOF>>                     {handleInput(); return EOF;}
 [' '|\t]                    {printf("%s", yytext); fprintf(yyout, "%s", yytext);}
 .                           {printf("%s", yytext); fprintf(yyout, "%s", yytext); wrongSymbol=yytext[0]; error = 2;}
 %%
@@ -77,12 +79,13 @@ int inputSymbol(char* input) {
 int handleInput() {
     if (error == 1) {
         printf("\nBłąd: za mała liczba argumentów\n");
-            fprintf(yyout, "\nBłąd: za mała liczba argumentów\n");
+        fprintf(yyout, "\nBłąd: za mała liczba argumentów\n");
         countNumbers = 0;
     }
     else if (error == 2) {
         printf("\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
         fprintf(yyout, "\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
+        countNumbers = 0;
     }
     else {
         int value = pop(snp);

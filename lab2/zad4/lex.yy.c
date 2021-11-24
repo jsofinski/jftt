@@ -446,6 +446,7 @@ char *yytext;
 #line 1 "zad4.l"
 #line 2 "zad4.l"
     /*Definition section */
+    #include "header.h"
     char stackChar[1000];
     char *scp;
     int stackNumber[1000];
@@ -456,8 +457,8 @@ char *yytext;
     int countNumbers = 0;
     #define push(sp, n) (*((sp)++) = (n))
     #define pop(sp) (*--(sp))
-#line 460 "lex.yy.c"
 #line 461 "lex.yy.c"
+#line 462 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -674,9 +675,9 @@ YY_DECL
 		}
 
 	{
-#line 16 "zad4.l"
+#line 17 "zad4.l"
 
-#line 680 "lex.yy.c"
+#line 681 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -735,38 +736,40 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 17 "zad4.l"
+#line 18 "zad4.l"
 {inputSymbol(yytext);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 18 "zad4.l"
+#line 19 "zad4.l"
 {inputNumber(yytext);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 19 "zad4.l"
+#line 20 "zad4.l"
 {handleInput();}
+	YY_BREAK
+case YY_STATE_EOF(INITIAL):
+#line 21 "zad4.l"
+{handleInput(); return EOF;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 20 "zad4.l"
+#line 22 "zad4.l"
 {printf("%s", yytext); fprintf(yyout, "%s", yytext);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 21 "zad4.l"
+#line 23 "zad4.l"
 {printf("%s", yytext); fprintf(yyout, "%s", yytext); wrongSymbol=yytext[0]; error = 2;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 22 "zad4.l"
+#line 24 "zad4.l"
 ECHO;
 	YY_BREAK
-#line 768 "lex.yy.c"
-case YY_STATE_EOF(INITIAL):
-	yyterminate();
+#line 773 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1769,7 +1772,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 22 "zad4.l"
+#line 24 "zad4.l"
 
   
 #include <stdio.h>
@@ -1828,12 +1831,13 @@ int inputSymbol(char* input) {
 int handleInput() {
     if (error == 1) {
         printf("\nBłąd: za mała liczba argumentów\n");
-            fprintf(yyout, "\nBłąd: za mała liczba argumentów\n");
+        fprintf(yyout, "\nBłąd: za mała liczba argumentów\n");
         countNumbers = 0;
     }
     else if (error == 2) {
         printf("\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
         fprintf(yyout, "\nBłąd: zły symbol \"%c\"\n", wrongSymbol);
+        countNumbers = 0;
     }
     else {
         int value = pop(snp);

@@ -1,7 +1,9 @@
 %{
     /*Definition section */
+    #include "header.h"
     int xmlDeclaration = 0;
-    int withinAttribute = 0;
+    int attributeCount = 0;
+    int stringCount = 0;
 %}
   
 /* 
@@ -12,13 +14,23 @@ Comments cannot be nested inside the other comments.
 */
 
 %%
-"<?xml"[.]*"?>" {fprintf(yyout, "%s", yytext); xmlDeclaration = 1; printf("just go xml declaration\n");}
-^[\t|' ']*"<!--"[a-zA-Z|' '|\t^'-']*"-->"[\n]    {fprintf(yyout, "");} //empty lines
+"<?xml".*"?>"   {fprintf(yyout, "%s", yytext); xmlDeclaration = 1;}
+"<"             {fprintf(yyout, "%s", yytext); attributeCount++;}
+">"             {fprintf(yyout, "%s", yytext); attributeCount--;}
+"\""            {fprintf(yyout, "%s", yytext); stringCount++;}
+("<!--").*("--")+.*("-->")  {fprintf(yyout, "%s", yytext);}
+("<!--").*("--->")          {fprintf(yyout, "%s", yytext);}
+("<!--").*("-->")           {handleComment(yytext);}
 .               {fprintf(yyout, "%s", yytext); }
 %%
   
 int yywrap(){}
   
+int handleComment(char* text) {
+    if (stringCount%2 != 0 || attributeCount != 0) {
+        fprintf(yyout, "%s", text); 
+    }
+}
 // driver code 
 int main()
 {

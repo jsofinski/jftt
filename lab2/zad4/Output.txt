@@ -14,3 +14,5 @@ Błąd: za mała liczba argumentów
 Błąd: za mała liczba operatorów
 2.4 3+
 Błąd: zły symbol "."
+1 3 ^ 6 * 6 /
+ = 1

@@ -441,13 +441,16 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "hello.l"
-#line 2 "hello.l"
+#line 1 "zad1.l"
+#line 2 "zad1.l"
     /*Definition section */
+    #include "header.h"
     int wordsCount = 0;
     int linesCount = 1;
-#line 450 "lex.yy.c"
-#line 451 "lex.yy.c"
+    char lastWs = 'x';
+    int lastWasWs = 0;
+#line 453 "lex.yy.c"
+#line 454 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -667,9 +670,9 @@ YY_DECL
 		}
 
 	{
-#line 7 "hello.l"
+#line 11 "zad1.l"
 
-#line 673 "lex.yy.c"
+#line 676 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -730,49 +733,49 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 8 "hello.l"
-{fprintf(yyout, "");} //empty lines
+#line 12 "zad1.l"
+{} //empty lines
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 9 "hello.l"
-{fprintf(yyout, "");} //remove whitespaces from begging
+#line 13 "zad1.l"
+{} //remove whitespaces from begging
 	YY_BREAK
 case 3:
 *yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 10 "hello.l"
-{fprintf(yyout, "");} //remove whitespaces from end
+#line 14 "zad1.l"
+{} //remove whitespaces from end
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 11 "hello.l"
-{fprintf(yyout, " ");} // multiple whitepaces
+#line 15 "zad1.l"
+{lastWs = yytext[0]; lastWasWs = 1;} // multiple whitepaces
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 12 "hello.l"
+#line 16 "zad1.l"
 {linesCount++; fprintf(yyout, "%s", yytext);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 13 "hello.l"
-{wordsCount++; fprintf(yyout, "%s", yytext);}
+#line 17 "zad1.l"
+{checkWs(); wordsCount++; fprintf(yyout, "%s", yytext);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 14 "hello.l"
-{fprintf(yyout, "%s", yytext); }
+#line 18 "zad1.l"
+{checkWs(); fprintf(yyout, "%s", yytext);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 15 "hello.l"
+#line 19 "zad1.l"
 ECHO;
 	YY_BREAK
-#line 776 "lex.yy.c"
+#line 779 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1780,11 +1783,19 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 15 "hello.l"
+#line 19 "zad1.l"
 
   
 int yywrap(){}
   
+
+int checkWs() {
+    if (lastWasWs) {
+        lastWasWs = 0;
+        fprintf(yyout, " "); 
+    }
+}
+
 // driver code 
 int main()
 {
@@ -1803,7 +1814,7 @@ int main()
   
     yylex();
 
-    printf("lines: %8d\n words: %8d\n", linesCount, wordsCount);
+    printf("lines: %8d\nwords: %8d\n", linesCount, wordsCount);
 
     return 0;
 }

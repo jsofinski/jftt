@@ -7,8 +7,6 @@
     In CDATA <!-- everything is data!!! -->
   ]]>
   <!-- valid comment -->
-  <!-- valid - comment -->
+  <!--abc-->
   <!-- invalid -- comment -->
-  <!-- B+, B, or B--->
-  <!-- declarations for <head> & <body> -->
 </root>

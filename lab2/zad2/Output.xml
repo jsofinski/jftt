@@ -6,9 +6,9 @@
   <![CDATA[
     In CDATA <!-- everything is data!!! -->
   ]]>
-  <!-- valid comment -->
-  <!-- valid - comment -->
-  <!-- invalid -- comment -->
-  <!-- B+, B, or B--->
-  <!-- declarations for <head> & <body> -->
+  <!-- valid comment -->dsa
+  <!-- valid - comment -->dsa
+  <!-- invalid -- comment -->dsa
+  <!-- B+, B, or B--->dsa
+  <!-- declarations for <head> & <body> -->dsa
 </root>

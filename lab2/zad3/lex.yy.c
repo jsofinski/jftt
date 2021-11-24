@@ -453,14 +453,15 @@ char *yytext;
 #line 1 "zad3.l"
 #line 2 "zad3.l"
     /*Definition section */
-
+    #include "header.h"
+    int leaveDoc = 0;
     int inString = 0;
     int singleLineComment = 0;      // // 
     int multipleLineComment = 0;    // /* */
     int docSingleLineComment = 0;   // ///    or //!
     int docmultipleLineComment = 0; // /** */ or /*! */
-#line 463 "lex.yy.c"
 #line 464 "lex.yy.c"
+#line 465 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -677,9 +678,9 @@ YY_DECL
 		}
 
 	{
-#line 12 "zad3.l"
+#line 13 "zad3.l"
 
-#line 683 "lex.yy.c"
+#line 684 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -738,62 +739,62 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 "zad3.l"
+#line 14 "zad3.l"
 {stringHandler(yytext);}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 14 "zad3.l"
+#line 15 "zad3.l"
 {docSingleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 15 "zad3.l"
+#line 16 "zad3.l"
 {docmultipleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 16 "zad3.l"
+#line 17 "zad3.l"
 {multipleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 17 "zad3.l"
+#line 18 "zad3.l"
 {docmultipleLineCommentHandler(0, yytext); multipleLineCommentHandler(0, "");}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 18 "zad3.l"
+#line 19 "zad3.l"
 {singleLineCommentHandler(1, yytext);}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 19 "zad3.l"
-{printf("slash\n");}
+#line 20 "zad3.l"
+{}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 20 "zad3.l"
+#line 21 "zad3.l"
 {singleLineCommentHandler(0, yytext); docSingleLineCommentHandler(0, "");everythingElseHandler(yytext);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "zad3.l"
+#line 22 "zad3.l"
 {everythingElseHandler(yytext);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "zad3.l"
+#line 23 "zad3.l"
 ECHO;
 	YY_BREAK
-#line 797 "lex.yy.c"
+#line 798 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1798,27 +1799,46 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 22 "zad3.l"
+#line 23 "zad3.l"
 
   
 int yywrap(){}
 
 
 int everythingElseHandler(char* text) {
-    if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
-        fprintf(yyout, "%s", text);
+    if (leaveDoc) {
+        if (!singleLineComment && !multipleLineComment) {
+            fprintf(yyout, "%s", text);
+        }
     }
-    
+    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+        fprintf(yyout, "%s", text);
+    }    
 }
-
 int stringHandler(char* text) {
-    if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment && !inString) {
-        inString = 1;
-        fprintf(yyout, "%s", text);
+    if (leaveDoc) {
+        if (!singleLineComment && !multipleLineComment && !inString) {
+            if (!docSingleLineComment && !docmultipleLineComment) {
+                inString = 1;
+            }
+            fprintf(yyout, "%s", text);
+        }
+        else if (!singleLineComment && !multipleLineComment && inString) {
+            if (!docSingleLineComment && !docmultipleLineComment) {
+                inString = 0;
+            }
+            fprintf(yyout, "%s", text);
+        }
     }
-    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment && inString) {
-        inString = 0;
-        fprintf(yyout, "%s", text);
+    else {
+        if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment && !inString) {
+            inString = 1;
+            fprintf(yyout, "%s", text);
+        }
+        else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment && inString) {
+            inString = 0;
+            fprintf(yyout, "%s", text);
+        }
     }
 }
 int singleLineCommentHandler(int begin, char* text) {
@@ -1852,40 +1872,77 @@ int multipleLineCommentHandler(int begin, char* text) {
     }
 }
 int docSingleLineCommentHandler(int begin, char* text) {
-    if (inString) {
-        fprintf(yyout, "%s", text);
-    }
-    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
-        if (begin == 1) {
-            docSingleLineComment = 1;
+    if (!leaveDoc) {
+        if (inString) {
+            fprintf(yyout, "%s", text);
+        }
+        else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+            if (begin == 1) {
+                docSingleLineComment = 1;
+            }
+        }
+        else if (!singleLineComment && !multipleLineComment && docSingleLineComment && !docmultipleLineComment) {
+            if (begin == 0) {
+                docSingleLineComment = 0;
+            }
         }
     }
-    else if (!singleLineComment && !multipleLineComment && docSingleLineComment && !docmultipleLineComment) {
-        if (begin == 0) {
-            docSingleLineComment = 0;
+    else {
+        if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+            fprintf(yyout, "%s", text);
+            if (begin == 1) {
+                docSingleLineComment = 1;
+            }
+        }
+        else if (!singleLineComment && !multipleLineComment && docSingleLineComment && !docmultipleLineComment) {
+            fprintf(yyout, "%s", text);
+            if (begin == 0) {
+                docSingleLineComment = 0;
+            }
         }
     }
 }
 int docmultipleLineCommentHandler(int begin, char* text) {
-    if (inString) {
-        fprintf(yyout, "%s", text);
-    }
-    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
-        if (begin == 1) {
-            docmultipleLineComment = 1;
+    if (!leaveDoc) {
+        if (inString) {
+            fprintf(yyout, "%s", text);
+        }
+        else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+            if (begin == 1) {
+                docmultipleLineComment = 1;
+            }
+        }
+        else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && docmultipleLineComment) {
+            if (begin == 0) {
+                docmultipleLineComment = 0;
+            }
         }
     }
-    else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && docmultipleLineComment) {
-        if (begin == 0) {
-            docmultipleLineComment = 0;
+    else {
+        if (!singleLineComment && !multipleLineComment && !docSingleLineComment && !docmultipleLineComment) {
+            fprintf(yyout, "%s", text);
+            if (begin == 1) {
+                docmultipleLineComment = 1;
+            }
         }
+        else if (!singleLineComment && !multipleLineComment && !docSingleLineComment && docmultipleLineComment) {
+            fprintf(yyout, "%s", text);
+            if (begin == 0) {
+                docmultipleLineComment = 0;
+            }
+        }    
     }
 }
 
 // driver code 
-int main()
+int main(int argc, char *argv[])
 {
-  
+    if (argc > 1) {
+        printf("%s\n", argv[1]);
+        if (!strcmp(argv[1], "-doc")) {
+            leaveDoc = 1;
+        }
+    }
     yyin = fopen("input.txt", "r");
   
     yyout = fopen("Output.txt", "w");
@@ -1893,5 +1950,3 @@ int main()
     yylex();
     return 0;
 }
-
-
