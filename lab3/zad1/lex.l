@@ -16,8 +16,9 @@ Comments cannot be nested inside the other comments.
 NUMBER         [0-9]+(\.[0-9]+)?
 
 %%
+^"#".*"\n"            ;
 [ \t]           ;
-{NUMBER}          	{ yylval = atoi(yytext); return NUM; }
+{NUMBER}        { yylval = atol(yytext); return NUM; }
 "+"             { return ADD; }
 "-"             { return SUB; }
 "*"             { return MUL; }
@@ -26,6 +27,7 @@ NUMBER         [0-9]+(\.[0-9]+)?
 "^"             { return POW; }
 "("				{ return LBR; }
 ")"				{ return RBR; }
+"\\\n"          {  }
 "\n"            { return END; }
 .               { return ERROR; }
 %%

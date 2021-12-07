@@ -69,14 +69,16 @@
 /* First part of user prologue.  */
 #line 1 "gram.y"
 
-#define YYSTYPE int
-#include<stdio.h>
-#include<math.h>
-extern int yylineno; // z lexa
-int yylex();
-int yyerror(char*); 
+    #define YYSTYPE long
+    #include<stdio.h>
+    #include<math.h>
+    #include "header.h"
+    extern int yylineno; // z lexa
+    int yylex();
+    int yyerror(char*); 
+    long size = 1234577;
 
-#line 80 "gram.tab.c"
+#line 82 "gram.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -113,15 +115,18 @@ enum yysymbol_kind_t
   YYSYMBOL_MUL = 6,                        /* MUL  */
   YYSYMBOL_DIV = 7,                        /* DIV  */
   YYSYMBOL_MOD = 8,                        /* MOD  */
-  YYSYMBOL_POW = 9,                        /* POW  */
-  YYSYMBOL_END = 10,                       /* END  */
-  YYSYMBOL_LBR = 11,                       /* LBR  */
-  YYSYMBOL_RBR = 12,                       /* RBR  */
-  YYSYMBOL_ERROR = 13,                     /* ERROR  */
-  YYSYMBOL_YYACCEPT = 14,                  /* $accept  */
-  YYSYMBOL_input = 15,                     /* input  */
-  YYSYMBOL_line = 16,                      /* line  */
-  YYSYMBOL_expr = 17                       /* expr  */
+  YYSYMBOL_NEG = 9,                        /* NEG  */
+  YYSYMBOL_POW = 10,                       /* POW  */
+  YYSYMBOL_END = 11,                       /* END  */
+  YYSYMBOL_LBR = 12,                       /* LBR  */
+  YYSYMBOL_RBR = 13,                       /* RBR  */
+  YYSYMBOL_ERROR = 14,                     /* ERROR  */
+  YYSYMBOL_YYACCEPT = 15,                  /* $accept  */
+  YYSYMBOL_input = 16,                     /* input  */
+  YYSYMBOL_line = 17,                      /* line  */
+  YYSYMBOL_expr = 18,                      /* expr  */
+  YYSYMBOL_expp = 19,                      /* expp  */
+  YYSYMBOL_expn = 20                       /* expn  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -443,19 +448,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   39
+#define YYLAST   137
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  14
+#define YYNTOKENS  15
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  13
+#define YYNRULES  30
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  24
+#define YYNSTATES  59
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   268
+#define YYMAXUTOK   269
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -495,15 +500,17 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    23,    23,    24,    27,    28,    31,    32,    33,    34,
-      35,    36,    37,    38
+       0,    27,    27,    28,    31,    32,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    45,    46,    47,    48,    49,
+      50,    51,    52,    54,    55,    56,    57,    58,    59,    60,
+      61
 };
 #endif
 
@@ -520,8 +527,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "NUM", "SUB", "ADD",
-  "MUL", "DIV", "MOD", "POW", "END", "LBR", "RBR", "ERROR", "$accept",
-  "input", "line", "expr", YY_NULLPTR
+  "MUL", "DIV", "MOD", "NEG", "POW", "END", "LBR", "RBR", "ERROR",
+  "$accept", "input", "line", "expr", "expp", "expn", YY_NULLPTR
 };
 
 static const char *
@@ -537,16 +544,16 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268
+     265,   266,   267,   268,   269
 };
 #endif
 
-#define YYPACT_NINF (-7)
+#define YYPACT_NINF (-18)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-1)
+#define YYTABLE_NINF (-31)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -555,9 +562,12 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -7,     0,    -7,    -6,    -7,    -1,    -7,    23,    -7,    14,
-      -1,    -1,    -1,    -1,    -1,    -1,    -7,    -7,    30,    30,
-      30,    30,    30,    30
+     -18,    36,   -18,     2,   -18,     0,    26,   -18,    67,   -18,
+       8,    26,    83,   -18,    37,    26,    26,    26,    26,    26,
+      55,   -18,    47,    26,    26,    26,    26,    26,    55,   -18,
+     103,   112,   116,    58,    17,   -18,     0,    55,   -18,   123,
+      90,    73,    94,   104,   117,   124,   -18,    57,    55,    55,
+      55,    55,    55,   -18,     1,   125,    -6,    20,   -18
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -565,21 +575,24 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,     0,     6,     0,     3,     0,     5,     0,
-       0,     0,     0,     0,     0,     0,     4,    13,     9,     7,
-       8,    10,    11,    12
+       2,     0,     1,     0,     6,     0,     0,     3,     0,     5,
+       6,     0,     0,     7,     0,     0,     0,     0,     0,     0,
+       0,     4,     0,     0,     0,     0,     0,     0,     0,    14,
+      10,     8,     9,    11,    12,    15,     0,     0,    13,    14,
+      26,     8,     9,    11,    12,    13,    16,     0,     0,     0,
+       0,     0,     0,    22,    19,    17,    18,    20,    21
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,    -7,     2
+     -18,   -18,   -18,    -1,   -17,    10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     6,     7
+       0,     1,     7,    12,    38,    13
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -587,41 +600,68 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,     3,     4,     4,     8,     0,     0,     9,     0,     0,
-       5,     5,    18,    19,    20,    21,    22,    23,    10,    11,
-      12,    13,    14,    15,     0,     0,    17,    10,    11,    12,
-      13,    14,    15,    16,    10,    11,    12,    13,    14,    15
+       8,    51,    52,    10,     5,    14,    49,    50,    51,    52,
+      22,    45,    11,     9,    30,    31,    32,    33,    34,   -23,
+      47,   -23,    40,    41,    42,    43,    44,    20,    52,     4,
+       5,    54,    55,    56,    57,    58,     2,     3,     6,     4,
+       5,    15,    16,    17,    18,    19,    46,    20,     6,     0,
+      29,    15,    16,    17,    18,    19,     0,    20,    35,    36,
+      39,    48,    49,    50,    51,    52,    19,    37,    20,     0,
+      53,    15,    16,    17,    18,    19,     0,    20,    21,    17,
+      18,    19,     0,    20,   -24,     0,   -24,    23,    24,    25,
+      26,    27,     0,    28,   -10,    16,    17,    18,    19,     0,
+      20,    18,    19,     0,    20,   -25,     0,   -25,    16,    17,
+      18,    19,    19,    20,    20,   -27,     0,   -27,    17,    18,
+      19,     0,    20,    18,    19,     0,    20,    20,   -28,     0,
+     -28,    50,    51,    52,   -30,   -29,   -30,   -29
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     1,     3,     3,    10,    -1,    -1,     5,    -1,    -1,
-      11,    11,    10,    11,    12,    13,    14,    15,     4,     5,
-       6,     7,     8,     9,    -1,    -1,    12,     4,     5,     6,
-       7,     8,     9,    10,     4,     5,     6,     7,     8,     9
+       1,     7,     8,     3,     4,     6,     5,     6,     7,     8,
+      11,    28,    12,    11,    15,    16,    17,    18,    19,    11,
+      37,    13,    23,    24,    25,    26,    27,    10,     8,     3,
+       4,    48,    49,    50,    51,    52,     0,     1,    12,     3,
+       4,     4,     5,     6,     7,     8,    36,    10,    12,    -1,
+      13,     4,     5,     6,     7,     8,    -1,    10,     3,     4,
+      13,     4,     5,     6,     7,     8,     8,    12,    10,    -1,
+      13,     4,     5,     6,     7,     8,    -1,    10,    11,     6,
+       7,     8,    -1,    10,    11,    -1,    13,     4,     5,     6,
+       7,     8,    -1,    10,     4,     5,     6,     7,     8,    -1,
+      10,     7,     8,    -1,    10,    11,    -1,    13,     5,     6,
+       7,     8,     8,    10,    10,    11,    -1,    13,     6,     7,
+       8,    -1,    10,     7,     8,    -1,    10,    10,    11,    -1,
+      13,     6,     7,     8,    11,    11,    13,    13
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    15,     0,     1,     3,    11,    16,    17,    10,    17,
-       4,     5,     6,     7,     8,     9,    10,    12,    17,    17,
-      17,    17,    17,    17
+       0,    16,     0,     1,     3,     4,    12,    17,    18,    11,
+       3,    12,    18,    20,    18,     4,     5,     6,     7,     8,
+      10,    11,    18,     4,     5,     6,     7,     8,    10,    13,
+      18,    18,    18,    18,    18,     3,     4,    12,    19,    13,
+      18,    18,    18,    18,    18,    19,    20,    19,     4,     5,
+       6,     7,     8,    13,    19,    19,    19,    19,    19
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    14,    15,    15,    16,    16,    17,    17,    17,    17,
-      17,    17,    17,    17
+       0,    15,    16,    16,    17,    17,    18,    18,    18,    18,
+      18,    18,    18,    18,    18,    19,    19,    19,    19,    19,
+      19,    19,    19,    20,    20,    20,    20,    20,    20,    20,
+      20
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     2,     2,     1,     3,     3,     3,
-       3,     3,     3,     3
+       0,     2,     0,     2,     2,     2,     1,     2,     3,     3,
+       3,     3,     3,     3,     3,     1,     2,     3,     3,     3,
+       3,     3,     3,     1,     3,     3,     3,     3,     3,     3,
+       3
 };
 
 
@@ -1089,67 +1129,169 @@ yyreduce:
   switch (yyn)
     {
   case 4: /* line: expr END  */
-#line 27 "gram.y"
-               {printf("Linia %d = %d\n", yylineno-1, yyval);}
-#line 1095 "gram.tab.c"
+#line 31 "gram.y"
+               {printf("\n= %ld\n", yyval);}
+#line 1135 "gram.tab.c"
     break;
 
   case 5: /* line: error END  */
-#line 28 "gram.y"
+#line 32 "gram.y"
                 {printf("Blad w skladni w linii %d\n", yylineno-1);}
-#line 1101 "gram.tab.c"
+#line 1141 "gram.tab.c"
     break;
 
   case 6: /* expr: NUM  */
-#line 31 "gram.y"
-                      {printf("%d", yylval); yyval = yyvsp[0];}
-#line 1107 "gram.tab.c"
-    break;
-
-  case 7: /* expr: expr ADD expr  */
-#line 32 "gram.y"
-                      {printf("+"); yyval = yyvsp[-2] + yyvsp[0];}
-#line 1113 "gram.tab.c"
-    break;
-
-  case 8: /* expr: expr MUL expr  */
-#line 33 "gram.y"
-                      {printf("*"); yyval = yyvsp[-2] * yyvsp[0];}
-#line 1119 "gram.tab.c"
-    break;
-
-  case 9: /* expr: expr SUB expr  */
-#line 34 "gram.y"
-                      {printf("-"); yyval = yyvsp[-2] - yyvsp[0];}
-#line 1125 "gram.tab.c"
-    break;
-
-  case 10: /* expr: expr DIV expr  */
 #line 35 "gram.y"
-                      {printf("/"); yyval = yyvsp[-2] / yyvsp[0];}
-#line 1131 "gram.tab.c"
+                      {printf("%ld ", num(yylval, 0)); yyval = num(yyvsp[0], 0);}
+#line 1147 "gram.tab.c"
     break;
 
-  case 11: /* expr: expr MOD expr  */
+  case 7: /* expr: SUB expn  */
 #line 36 "gram.y"
-                      {printf("mod"); yyval = yyvsp[-2] % yyvsp[0];}
-#line 1137 "gram.tab.c"
-    break;
-
-  case 12: /* expr: expr POW expr  */
-#line 37 "gram.y"
-                      {printf("^"); yyval = pow(yyvsp[-2], yyvsp[0]);}
-#line 1143 "gram.tab.c"
-    break;
-
-  case 13: /* expr: LBR expr RBR  */
-#line 38 "gram.y"
-                      {printf("()"); yyval = yyvsp[-1];}
-#line 1149 "gram.tab.c"
-    break;
-
-
+                      {printf("%ld ", num(-yylval, 0)); yyval = num(-yyvsp[0], 0);}
 #line 1153 "gram.tab.c"
+    break;
+
+  case 8: /* expr: expr ADD expr  */
+#line 37 "gram.y"
+                      {printf("+ "); yyval = add(yyvsp[-2], yyvsp[0], 0);}
+#line 1159 "gram.tab.c"
+    break;
+
+  case 9: /* expr: expr MUL expr  */
+#line 38 "gram.y"
+                      {printf("* "); yyval = mul(yyvsp[-2], yyvsp[0], 0);}
+#line 1165 "gram.tab.c"
+    break;
+
+  case 10: /* expr: expr SUB expr  */
+#line 39 "gram.y"
+                      {printf("[-]"); yyval = sub(yyvsp[-2], yyvsp[0], 0);}
+#line 1171 "gram.tab.c"
+    break;
+
+  case 11: /* expr: expr DIV expr  */
+#line 40 "gram.y"
+                      {printf("/" ); yyval = div(yyvsp[-2], yyvsp[0], 0);}
+#line 1177 "gram.tab.c"
+    break;
+
+  case 12: /* expr: expr MOD expr  */
+#line 41 "gram.y"
+                      {printf("mod "); yyval = mod(yyvsp[-2], yyvsp[0], 0);}
+#line 1183 "gram.tab.c"
+    break;
+
+  case 13: /* expr: expr POW expp  */
+#line 42 "gram.y"
+                      {printf("^ "); yyval = myPow(yyvsp[-2], yyvsp[0], 0);}
+#line 1189 "gram.tab.c"
+    break;
+
+  case 14: /* expr: LBR expr RBR  */
+#line 43 "gram.y"
+                      {printf("() "); yyval = yyvsp[-1];}
+#line 1195 "gram.tab.c"
+    break;
+
+  case 15: /* expp: NUM  */
+#line 45 "gram.y"
+                      {printf("%ld ", yylval); yyval = yyvsp[0];}
+#line 1201 "gram.tab.c"
+    break;
+
+  case 16: /* expp: SUB expn  */
+#line 46 "gram.y"
+                      {printf("%ld ", num(-yylval, 1)); yyval = -yyvsp[0];}
+#line 1207 "gram.tab.c"
+    break;
+
+  case 17: /* expp: expp ADD expp  */
+#line 47 "gram.y"
+                      {printf("+ "); yyval = add(yyvsp[-2], yyvsp[0], 1);}
+#line 1213 "gram.tab.c"
+    break;
+
+  case 18: /* expp: expp MUL expp  */
+#line 48 "gram.y"
+                      {printf("* "); yyval = mul(yyvsp[-2], yyvsp[0], 1);}
+#line 1219 "gram.tab.c"
+    break;
+
+  case 19: /* expp: expp SUB expp  */
+#line 49 "gram.y"
+                      {printf("[-,%ld]", sub(yyvsp[-2], yyvsp[0])); yyval = sub(yyvsp[-2], yyvsp[0], 1);}
+#line 1225 "gram.tab.c"
+    break;
+
+  case 20: /* expp: expp DIV expp  */
+#line 50 "gram.y"
+                      {printf("/" ); yyval = div(yyvsp[-2], yyvsp[0], 1);}
+#line 1231 "gram.tab.c"
+    break;
+
+  case 21: /* expp: expp MOD expp  */
+#line 51 "gram.y"
+                      {printf("mod "); yyval = mod(yyvsp[-2], yyvsp[0], 1);}
+#line 1237 "gram.tab.c"
+    break;
+
+  case 22: /* expp: LBR expp RBR  */
+#line 52 "gram.y"
+                      {printf("() "); yyval = yyvsp[-1];}
+#line 1243 "gram.tab.c"
+    break;
+
+  case 23: /* expn: NUM  */
+#line 54 "gram.y"
+                      {yyval = yyvsp[0];}
+#line 1249 "gram.tab.c"
+    break;
+
+  case 24: /* expn: expr ADD expr  */
+#line 55 "gram.y"
+                      {printf("+ "); yyval = add(yyvsp[-2], yyvsp[0]);}
+#line 1255 "gram.tab.c"
+    break;
+
+  case 25: /* expn: expr MUL expr  */
+#line 56 "gram.y"
+                      {printf("* "); yyval = mul(yyvsp[-2], yyvsp[0]);}
+#line 1261 "gram.tab.c"
+    break;
+
+  case 26: /* expn: expr SUB expr  */
+#line 57 "gram.y"
+                      {printf("[-]"); yyval = sub(yyvsp[-2], yyvsp[0]);}
+#line 1267 "gram.tab.c"
+    break;
+
+  case 27: /* expn: expr DIV expr  */
+#line 58 "gram.y"
+                      {printf("/" ); yyval = div(yyvsp[-2], yyvsp[0]);}
+#line 1273 "gram.tab.c"
+    break;
+
+  case 28: /* expn: expr MOD expr  */
+#line 59 "gram.y"
+                      {printf("mod "); yyval = mod(yyvsp[-2], yyvsp[0]);}
+#line 1279 "gram.tab.c"
+    break;
+
+  case 29: /* expn: expr POW expp  */
+#line 60 "gram.y"
+                      {printf("^ "); yyval = myPow(yyvsp[-2], yyvsp[0]);}
+#line 1285 "gram.tab.c"
+    break;
+
+  case 30: /* expn: LBR expr RBR  */
+#line 61 "gram.y"
+                      {printf("() "); yyval = num(yyvsp[-1]);}
+#line 1291 "gram.tab.c"
+    break;
+
+
+#line 1295 "gram.tab.c"
 
       default: break;
     }
@@ -1343,14 +1485,89 @@ yyreturn:
   return yyresult;
 }
 
-#line 40 "gram.y"
+#line 62 "gram.y"
 
 int yyerror(char *s) {
     printf("%s\n", s);
     return 0;
 }
-// driver code 
 
+
+// expn:   NUM           {$$ = $1;}
+//     |   LBR expn RBR  {printf("() "); $$ = num($2);}
+//     |   expn ADD expn {printf("+ "); $$ = add($1, $3);}
+//     |   expn MUL expn {printf("* "); $$ = mul($1, $3);}
+//     |   expn SUB expn {printf("[-]"); $$ = sub($1, $3);}
+//     |   expn DIV expn {printf("/" ); $$ = div($1, $3);}
+//     |   expn MOD expn {printf("mod "); $$ = mod($1, $3);}
+//     |   expn POW expp {printf("^ "); $$ = myPow($1, $3);}
+//     ;
+
+
+
+long normalize(long a, long x) {
+    long newSize = size-x;
+    
+    if (a >= newSize) {
+        return (a%newSize);
+    }
+    while (a < 0) {
+        a += newSize;
+    }
+    return a;
+}
+
+long num(long a, long x) {
+    return normalize(a, x);
+}
+
+long add(long a, long b, long x) {
+    return normalize(a+b, x);
+}
+
+long mul(long a, long b, long x) {
+    return normalize(a*b, x);
+}
+
+long neg(long a, long x) {
+    return normalize(-a, x);
+}
+
+long sub(long a, long b, long x) {
+    return normalize(a-b, x);
+}
+
+long div(long a, long b, long x) {
+    for (long i = 1; i < size-2; i++) {
+        if (normalize(i * b, x) == a) {
+            return i;
+        }
+    }
+    printf("Brak elementu odwrotnego\n");
+    return 0;
+}
+
+long mod(long a, long b, long x) {
+    return normalize(a%b, x);
+}
+
+long myPow(long a, long b, long x) {
+    long i = 1;
+    long result = a;
+    long power = b;
+    long newSize = size-1;
+    if (power >= newSize) {
+        power = power%newSize;
+    }
+    while (power < 0) {
+        power += newSize;
+    }
+    while (i < power) {
+        result = normalize(result*a, x);
+        i++;
+    }
+    return result;
+}
 
 int main(int argc, char *argv[])
 {

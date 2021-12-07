@@ -60,11 +60,12 @@ extern int yydebug;
     MUL = 261,                     /* MUL  */
     DIV = 262,                     /* DIV  */
     MOD = 263,                     /* MOD  */
-    POW = 264,                     /* POW  */
-    END = 265,                     /* END  */
-    LBR = 266,                     /* LBR  */
-    RBR = 267,                     /* RBR  */
-    ERROR = 268                    /* ERROR  */
+    NEG = 264,                     /* NEG  */
+    POW = 265,                     /* POW  */
+    END = 266,                     /* END  */
+    LBR = 267,                     /* LBR  */
+    RBR = 268,                     /* RBR  */
+    ERROR = 269                    /* ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif

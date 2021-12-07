@@ -1,0 +1,829 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expr
+Rule 1     expr -> expr ADD expr
+Rule 2     expr -> expr SUB expr
+Rule 3     expr -> expr MUL expr
+Rule 4     expr -> expr DIV expr
+Rule 5     expr -> expr MOD expr
+Rule 6     expr -> expr POW expp
+Rule 7     expr -> LBR expr RBR
+Rule 8     expr -> NUM
+Rule 9     expr -> SUB expn
+Rule 10    expn -> NUM
+Rule 11    expn -> LBR expr RBR
+Rule 12    expp -> expp ADD expp
+Rule 13    expp -> expp SUB expp
+Rule 14    expp -> expp MUL expp
+Rule 15    expp -> expp DIV expp
+Rule 16    expp -> expp MOD expp
+Rule 17    expp -> LBR expp RBR
+Rule 18    expp -> SUB exppn
+Rule 19    exppn -> NUM
+Rule 20    expp -> NUM
+
+Terminals, with rules where they appear
+
+ADD                  : 1 12
+DIV                  : 4 15
+LBR                  : 7 11 17
+MOD                  : 5 16
+MUL                  : 3 14
+NUM                  : 8 10 19 20
+POW                  : 6
+RBR                  : 7 11 17
+SUB                  : 2 9 13 18
+error                : 
+
+Nonterminals, with rules where they appear
+
+expn                 : 9
+expp                 : 6 12 12 13 13 14 14 15 15 16 16 17
+exppn                : 18
+expr                 : 1 1 2 2 3 3 4 4 5 5 6 7 11 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expr
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 1
+
+state 1
+
+    (0) S' -> expr .
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    ADD             shift and go to state 5
+    SUB             shift and go to state 6
+    MUL             shift and go to state 7
+    DIV             shift and go to state 8
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+
+state 2
+
+    (9) expr -> SUB . expn
+    (10) expn -> . NUM
+    (11) expn -> . LBR expr RBR
+
+    NUM             shift and go to state 12
+    LBR             shift and go to state 13
+
+    expn                           shift and go to state 11
+
+state 3
+
+    (7) expr -> LBR . expr RBR
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 14
+
+state 4
+
+    (8) expr -> NUM .
+
+    ADD             reduce using rule 8 (expr -> NUM .)
+    SUB             reduce using rule 8 (expr -> NUM .)
+    MUL             reduce using rule 8 (expr -> NUM .)
+    DIV             reduce using rule 8 (expr -> NUM .)
+    MOD             reduce using rule 8 (expr -> NUM .)
+    POW             reduce using rule 8 (expr -> NUM .)
+    $end            reduce using rule 8 (expr -> NUM .)
+    RBR             reduce using rule 8 (expr -> NUM .)
+
+
+state 5
+
+    (1) expr -> expr ADD . expr
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 15
+
+state 6
+
+    (2) expr -> expr SUB . expr
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 16
+
+state 7
+
+    (3) expr -> expr MUL . expr
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 17
+
+state 8
+
+    (4) expr -> expr DIV . expr
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 18
+
+state 9
+
+    (5) expr -> expr MOD . expr
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 19
+
+state 10
+
+    (6) expr -> expr POW . expp
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 20
+
+state 11
+
+    (9) expr -> SUB expn .
+
+    ADD             reduce using rule 9 (expr -> SUB expn .)
+    SUB             reduce using rule 9 (expr -> SUB expn .)
+    MUL             reduce using rule 9 (expr -> SUB expn .)
+    DIV             reduce using rule 9 (expr -> SUB expn .)
+    MOD             reduce using rule 9 (expr -> SUB expn .)
+    POW             reduce using rule 9 (expr -> SUB expn .)
+    $end            reduce using rule 9 (expr -> SUB expn .)
+    RBR             reduce using rule 9 (expr -> SUB expn .)
+
+
+state 12
+
+    (10) expn -> NUM .
+
+    ADD             reduce using rule 10 (expn -> NUM .)
+    SUB             reduce using rule 10 (expn -> NUM .)
+    MUL             reduce using rule 10 (expn -> NUM .)
+    DIV             reduce using rule 10 (expn -> NUM .)
+    MOD             reduce using rule 10 (expn -> NUM .)
+    POW             reduce using rule 10 (expn -> NUM .)
+    $end            reduce using rule 10 (expn -> NUM .)
+    RBR             reduce using rule 10 (expn -> NUM .)
+
+
+state 13
+
+    (11) expn -> LBR . expr RBR
+    (1) expr -> . expr ADD expr
+    (2) expr -> . expr SUB expr
+    (3) expr -> . expr MUL expr
+    (4) expr -> . expr DIV expr
+    (5) expr -> . expr MOD expr
+    (6) expr -> . expr POW expp
+    (7) expr -> . LBR expr RBR
+    (8) expr -> . NUM
+    (9) expr -> . SUB expn
+
+    LBR             shift and go to state 3
+    NUM             shift and go to state 4
+    SUB             shift and go to state 2
+
+    expr                           shift and go to state 24
+
+state 14
+
+    (7) expr -> LBR expr . RBR
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    RBR             shift and go to state 25
+    ADD             shift and go to state 5
+    SUB             shift and go to state 6
+    MUL             shift and go to state 7
+    DIV             shift and go to state 8
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+
+state 15
+
+    (1) expr -> expr ADD expr .
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    ADD             reduce using rule 1 (expr -> expr ADD expr .)
+    SUB             reduce using rule 1 (expr -> expr ADD expr .)
+    $end            reduce using rule 1 (expr -> expr ADD expr .)
+    RBR             reduce using rule 1 (expr -> expr ADD expr .)
+    MUL             shift and go to state 7
+    DIV             shift and go to state 8
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+  ! MUL             [ reduce using rule 1 (expr -> expr ADD expr .) ]
+  ! DIV             [ reduce using rule 1 (expr -> expr ADD expr .) ]
+  ! MOD             [ reduce using rule 1 (expr -> expr ADD expr .) ]
+  ! POW             [ reduce using rule 1 (expr -> expr ADD expr .) ]
+  ! ADD             [ shift and go to state 5 ]
+  ! SUB             [ shift and go to state 6 ]
+
+
+state 16
+
+    (2) expr -> expr SUB expr .
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    ADD             reduce using rule 2 (expr -> expr SUB expr .)
+    SUB             reduce using rule 2 (expr -> expr SUB expr .)
+    $end            reduce using rule 2 (expr -> expr SUB expr .)
+    RBR             reduce using rule 2 (expr -> expr SUB expr .)
+    MUL             shift and go to state 7
+    DIV             shift and go to state 8
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+  ! MUL             [ reduce using rule 2 (expr -> expr SUB expr .) ]
+  ! DIV             [ reduce using rule 2 (expr -> expr SUB expr .) ]
+  ! MOD             [ reduce using rule 2 (expr -> expr SUB expr .) ]
+  ! POW             [ reduce using rule 2 (expr -> expr SUB expr .) ]
+  ! ADD             [ shift and go to state 5 ]
+  ! SUB             [ shift and go to state 6 ]
+
+
+state 17
+
+    (3) expr -> expr MUL expr .
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    ADD             reduce using rule 3 (expr -> expr MUL expr .)
+    SUB             reduce using rule 3 (expr -> expr MUL expr .)
+    MUL             reduce using rule 3 (expr -> expr MUL expr .)
+    DIV             reduce using rule 3 (expr -> expr MUL expr .)
+    $end            reduce using rule 3 (expr -> expr MUL expr .)
+    RBR             reduce using rule 3 (expr -> expr MUL expr .)
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+  ! MOD             [ reduce using rule 3 (expr -> expr MUL expr .) ]
+  ! POW             [ reduce using rule 3 (expr -> expr MUL expr .) ]
+  ! ADD             [ shift and go to state 5 ]
+  ! SUB             [ shift and go to state 6 ]
+  ! MUL             [ shift and go to state 7 ]
+  ! DIV             [ shift and go to state 8 ]
+
+
+state 18
+
+    (4) expr -> expr DIV expr .
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    ADD             reduce using rule 4 (expr -> expr DIV expr .)
+    SUB             reduce using rule 4 (expr -> expr DIV expr .)
+    MUL             reduce using rule 4 (expr -> expr DIV expr .)
+    DIV             reduce using rule 4 (expr -> expr DIV expr .)
+    $end            reduce using rule 4 (expr -> expr DIV expr .)
+    RBR             reduce using rule 4 (expr -> expr DIV expr .)
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+  ! MOD             [ reduce using rule 4 (expr -> expr DIV expr .) ]
+  ! POW             [ reduce using rule 4 (expr -> expr DIV expr .) ]
+  ! ADD             [ shift and go to state 5 ]
+  ! SUB             [ shift and go to state 6 ]
+  ! MUL             [ shift and go to state 7 ]
+  ! DIV             [ shift and go to state 8 ]
+
+
+state 19
+
+    (5) expr -> expr MOD expr .
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    ADD             reduce using rule 5 (expr -> expr MOD expr .)
+    SUB             reduce using rule 5 (expr -> expr MOD expr .)
+    MUL             reduce using rule 5 (expr -> expr MOD expr .)
+    DIV             reduce using rule 5 (expr -> expr MOD expr .)
+    MOD             reduce using rule 5 (expr -> expr MOD expr .)
+    POW             reduce using rule 5 (expr -> expr MOD expr .)
+    $end            reduce using rule 5 (expr -> expr MOD expr .)
+    RBR             reduce using rule 5 (expr -> expr MOD expr .)
+
+  ! ADD             [ shift and go to state 5 ]
+  ! SUB             [ shift and go to state 6 ]
+  ! MUL             [ shift and go to state 7 ]
+  ! DIV             [ shift and go to state 8 ]
+  ! MOD             [ shift and go to state 9 ]
+  ! POW             [ shift and go to state 10 ]
+
+
+state 20
+
+    (6) expr -> expr POW expp .
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    ADD             reduce using rule 6 (expr -> expr POW expp .)
+    SUB             reduce using rule 6 (expr -> expr POW expp .)
+    MUL             reduce using rule 6 (expr -> expr POW expp .)
+    DIV             reduce using rule 6 (expr -> expr POW expp .)
+    MOD             reduce using rule 6 (expr -> expr POW expp .)
+    POW             reduce using rule 6 (expr -> expr POW expp .)
+    $end            reduce using rule 6 (expr -> expr POW expp .)
+    RBR             reduce using rule 6 (expr -> expr POW expp .)
+
+  ! ADD             [ shift and go to state 26 ]
+  ! SUB             [ shift and go to state 27 ]
+  ! MUL             [ shift and go to state 28 ]
+  ! DIV             [ shift and go to state 29 ]
+  ! MOD             [ shift and go to state 30 ]
+
+
+state 21
+
+    (18) expp -> SUB . exppn
+    (19) exppn -> . NUM
+
+    NUM             shift and go to state 32
+
+    exppn                          shift and go to state 31
+
+state 22
+
+    (17) expp -> LBR . expp RBR
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 33
+
+state 23
+
+    (20) expp -> NUM .
+
+    ADD             reduce using rule 20 (expp -> NUM .)
+    SUB             reduce using rule 20 (expp -> NUM .)
+    MUL             reduce using rule 20 (expp -> NUM .)
+    DIV             reduce using rule 20 (expp -> NUM .)
+    MOD             reduce using rule 20 (expp -> NUM .)
+    POW             reduce using rule 20 (expp -> NUM .)
+    $end            reduce using rule 20 (expp -> NUM .)
+    RBR             reduce using rule 20 (expp -> NUM .)
+
+
+state 24
+
+    (11) expn -> LBR expr . RBR
+    (1) expr -> expr . ADD expr
+    (2) expr -> expr . SUB expr
+    (3) expr -> expr . MUL expr
+    (4) expr -> expr . DIV expr
+    (5) expr -> expr . MOD expr
+    (6) expr -> expr . POW expp
+
+    RBR             shift and go to state 34
+    ADD             shift and go to state 5
+    SUB             shift and go to state 6
+    MUL             shift and go to state 7
+    DIV             shift and go to state 8
+    MOD             shift and go to state 9
+    POW             shift and go to state 10
+
+
+state 25
+
+    (7) expr -> LBR expr RBR .
+
+    ADD             reduce using rule 7 (expr -> LBR expr RBR .)
+    SUB             reduce using rule 7 (expr -> LBR expr RBR .)
+    MUL             reduce using rule 7 (expr -> LBR expr RBR .)
+    DIV             reduce using rule 7 (expr -> LBR expr RBR .)
+    MOD             reduce using rule 7 (expr -> LBR expr RBR .)
+    POW             reduce using rule 7 (expr -> LBR expr RBR .)
+    $end            reduce using rule 7 (expr -> LBR expr RBR .)
+    RBR             reduce using rule 7 (expr -> LBR expr RBR .)
+
+
+state 26
+
+    (12) expp -> expp ADD . expp
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 35
+
+state 27
+
+    (13) expp -> expp SUB . expp
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 36
+
+state 28
+
+    (14) expp -> expp MUL . expp
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 37
+
+state 29
+
+    (15) expp -> expp DIV . expp
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 38
+
+state 30
+
+    (16) expp -> expp MOD . expp
+    (12) expp -> . expp ADD expp
+    (13) expp -> . expp SUB expp
+    (14) expp -> . expp MUL expp
+    (15) expp -> . expp DIV expp
+    (16) expp -> . expp MOD expp
+    (17) expp -> . LBR expp RBR
+    (18) expp -> . SUB exppn
+    (20) expp -> . NUM
+
+    LBR             shift and go to state 22
+    SUB             shift and go to state 21
+    NUM             shift and go to state 23
+
+    expp                           shift and go to state 39
+
+state 31
+
+    (18) expp -> SUB exppn .
+
+    ADD             reduce using rule 18 (expp -> SUB exppn .)
+    SUB             reduce using rule 18 (expp -> SUB exppn .)
+    MUL             reduce using rule 18 (expp -> SUB exppn .)
+    DIV             reduce using rule 18 (expp -> SUB exppn .)
+    MOD             reduce using rule 18 (expp -> SUB exppn .)
+    POW             reduce using rule 18 (expp -> SUB exppn .)
+    $end            reduce using rule 18 (expp -> SUB exppn .)
+    RBR             reduce using rule 18 (expp -> SUB exppn .)
+
+
+state 32
+
+    (19) exppn -> NUM .
+
+    ADD             reduce using rule 19 (exppn -> NUM .)
+    SUB             reduce using rule 19 (exppn -> NUM .)
+    MUL             reduce using rule 19 (exppn -> NUM .)
+    DIV             reduce using rule 19 (exppn -> NUM .)
+    MOD             reduce using rule 19 (exppn -> NUM .)
+    POW             reduce using rule 19 (exppn -> NUM .)
+    $end            reduce using rule 19 (exppn -> NUM .)
+    RBR             reduce using rule 19 (exppn -> NUM .)
+
+
+state 33
+
+    (17) expp -> LBR expp . RBR
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    RBR             shift and go to state 40
+    ADD             shift and go to state 26
+    SUB             shift and go to state 27
+    MUL             shift and go to state 28
+    DIV             shift and go to state 29
+    MOD             shift and go to state 30
+
+
+state 34
+
+    (11) expn -> LBR expr RBR .
+
+    ADD             reduce using rule 11 (expn -> LBR expr RBR .)
+    SUB             reduce using rule 11 (expn -> LBR expr RBR .)
+    MUL             reduce using rule 11 (expn -> LBR expr RBR .)
+    DIV             reduce using rule 11 (expn -> LBR expr RBR .)
+    MOD             reduce using rule 11 (expn -> LBR expr RBR .)
+    POW             reduce using rule 11 (expn -> LBR expr RBR .)
+    $end            reduce using rule 11 (expn -> LBR expr RBR .)
+    RBR             reduce using rule 11 (expn -> LBR expr RBR .)
+
+
+state 35
+
+    (12) expp -> expp ADD expp .
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    ADD             reduce using rule 12 (expp -> expp ADD expp .)
+    SUB             reduce using rule 12 (expp -> expp ADD expp .)
+    POW             reduce using rule 12 (expp -> expp ADD expp .)
+    $end            reduce using rule 12 (expp -> expp ADD expp .)
+    RBR             reduce using rule 12 (expp -> expp ADD expp .)
+    MUL             shift and go to state 28
+    DIV             shift and go to state 29
+    MOD             shift and go to state 30
+
+  ! MUL             [ reduce using rule 12 (expp -> expp ADD expp .) ]
+  ! DIV             [ reduce using rule 12 (expp -> expp ADD expp .) ]
+  ! MOD             [ reduce using rule 12 (expp -> expp ADD expp .) ]
+  ! ADD             [ shift and go to state 26 ]
+  ! SUB             [ shift and go to state 27 ]
+
+
+state 36
+
+    (13) expp -> expp SUB expp .
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    ADD             reduce using rule 13 (expp -> expp SUB expp .)
+    SUB             reduce using rule 13 (expp -> expp SUB expp .)
+    POW             reduce using rule 13 (expp -> expp SUB expp .)
+    $end            reduce using rule 13 (expp -> expp SUB expp .)
+    RBR             reduce using rule 13 (expp -> expp SUB expp .)
+    MUL             shift and go to state 28
+    DIV             shift and go to state 29
+    MOD             shift and go to state 30
+
+  ! MUL             [ reduce using rule 13 (expp -> expp SUB expp .) ]
+  ! DIV             [ reduce using rule 13 (expp -> expp SUB expp .) ]
+  ! MOD             [ reduce using rule 13 (expp -> expp SUB expp .) ]
+  ! ADD             [ shift and go to state 26 ]
+  ! SUB             [ shift and go to state 27 ]
+
+
+state 37
+
+    (14) expp -> expp MUL expp .
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    ADD             reduce using rule 14 (expp -> expp MUL expp .)
+    SUB             reduce using rule 14 (expp -> expp MUL expp .)
+    MUL             reduce using rule 14 (expp -> expp MUL expp .)
+    DIV             reduce using rule 14 (expp -> expp MUL expp .)
+    POW             reduce using rule 14 (expp -> expp MUL expp .)
+    $end            reduce using rule 14 (expp -> expp MUL expp .)
+    RBR             reduce using rule 14 (expp -> expp MUL expp .)
+    MOD             shift and go to state 30
+
+  ! MOD             [ reduce using rule 14 (expp -> expp MUL expp .) ]
+  ! ADD             [ shift and go to state 26 ]
+  ! SUB             [ shift and go to state 27 ]
+  ! MUL             [ shift and go to state 28 ]
+  ! DIV             [ shift and go to state 29 ]
+
+
+state 38
+
+    (15) expp -> expp DIV expp .
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    ADD             reduce using rule 15 (expp -> expp DIV expp .)
+    SUB             reduce using rule 15 (expp -> expp DIV expp .)
+    MUL             reduce using rule 15 (expp -> expp DIV expp .)
+    DIV             reduce using rule 15 (expp -> expp DIV expp .)
+    POW             reduce using rule 15 (expp -> expp DIV expp .)
+    $end            reduce using rule 15 (expp -> expp DIV expp .)
+    RBR             reduce using rule 15 (expp -> expp DIV expp .)
+    MOD             shift and go to state 30
+
+  ! MOD             [ reduce using rule 15 (expp -> expp DIV expp .) ]
+  ! ADD             [ shift and go to state 26 ]
+  ! SUB             [ shift and go to state 27 ]
+  ! MUL             [ shift and go to state 28 ]
+  ! DIV             [ shift and go to state 29 ]
+
+
+state 39
+
+    (16) expp -> expp MOD expp .
+    (12) expp -> expp . ADD expp
+    (13) expp -> expp . SUB expp
+    (14) expp -> expp . MUL expp
+    (15) expp -> expp . DIV expp
+    (16) expp -> expp . MOD expp
+
+    ADD             reduce using rule 16 (expp -> expp MOD expp .)
+    SUB             reduce using rule 16 (expp -> expp MOD expp .)
+    MUL             reduce using rule 16 (expp -> expp MOD expp .)
+    DIV             reduce using rule 16 (expp -> expp MOD expp .)
+    MOD             reduce using rule 16 (expp -> expp MOD expp .)
+    POW             reduce using rule 16 (expp -> expp MOD expp .)
+    $end            reduce using rule 16 (expp -> expp MOD expp .)
+    RBR             reduce using rule 16 (expp -> expp MOD expp .)
+
+  ! ADD             [ shift and go to state 26 ]
+  ! SUB             [ shift and go to state 27 ]
+  ! MUL             [ shift and go to state 28 ]
+  ! DIV             [ shift and go to state 29 ]
+  ! MOD             [ shift and go to state 30 ]
+
+
+state 40
+
+    (17) expp -> LBR expp RBR .
+
+    ADD             reduce using rule 17 (expp -> LBR expp RBR .)
+    SUB             reduce using rule 17 (expp -> LBR expp RBR .)
+    MUL             reduce using rule 17 (expp -> LBR expp RBR .)
+    DIV             reduce using rule 17 (expp -> LBR expp RBR .)
+    MOD             reduce using rule 17 (expp -> LBR expp RBR .)
+    POW             reduce using rule 17 (expp -> LBR expp RBR .)
+    $end            reduce using rule 17 (expp -> LBR expp RBR .)
+    RBR             reduce using rule 17 (expp -> LBR expp RBR .)
+
