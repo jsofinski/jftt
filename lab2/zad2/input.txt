@@ -7,7 +7,9 @@
     In CDATA <!-- everything is data!!! -->
   ]]>
   <!-- valid comment -->
-  <!-- valid - comment -->
+  <!-- valid --> comment -->  <!-- cyk --> comment -->
+  <!-- valid - comment --> asbcx 123 s <!-- valid - comment --> asbcx 1234 s <!-- valid - comment -->
+  <!-- valid - comment --> asbcx s 
   <!-- invalid -- comment -->
   <!-- B+, B, or B--->
   <!-- declarations for <head> & <body> -->

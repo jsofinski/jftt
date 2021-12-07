@@ -2,5 +2,5 @@
 #define HEADER_FILE
 
 int handleComment();
-
+int handleMultiple();
 #endif

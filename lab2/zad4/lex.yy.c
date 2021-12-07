@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 6
-#define YY_END_OF_BUFFER 7
+#define YY_NUM_RULES 7
+#define YY_END_OF_BUFFER 8
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -360,10 +360,10 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[14] =
+static const flex_int16_t yy_accept[15] =
     {   0,
-        2,    2,    7,    5,    4,    3,    1,    1,    1,    2,
-        1,    2,    0
+        2,    2,    8,    6,    5,    4,    1,    1,    1,    2,
+        1,    3,    2,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -403,30 +403,30 @@ static const YY_CHAR yy_meta[9] =
         1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[14] =
+static const flex_int16_t yy_base[15] =
     {   0,
-        0,    0,   13,   14,   14,   14,   14,    5,    4,    3,
-       14,    2,   14
+        0,   11,   13,   15,   15,   15,   15,    5,    4,    3,
+       15,   15,    2,   15
     } ;
 
-static const flex_int16_t yy_def[14] =
+static const flex_int16_t yy_def[15] =
     {   0,
-       13,    1,   13,   13,   13,   13,   13,   13,   13,   13,
-       13,   13,    0
+       14,    1,   14,   14,   14,   14,   14,   14,   14,   14,
+       14,   14,   14,    0
     } ;
 
-static const flex_int16_t yy_nxt[23] =
+static const flex_int16_t yy_nxt[24] =
     {   0,
-        4,    5,    6,    7,    8,    9,   10,   11,   12,   12,
-       12,   12,   13,    3,   13,   13,   13,   13,   13,   13,
-       13,   13
+        4,    5,    6,    7,    8,    9,   10,   11,   13,   13,
+       13,   13,   14,   12,    3,   14,   14,   14,   14,   14,
+       14,   14,   14
     } ;
 
-static const flex_int16_t yy_chk[23] =
+static const flex_int16_t yy_chk[24] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,   12,   10,
-        9,    8,    3,   13,   13,   13,   13,   13,   13,   13,
-       13,   13
+        1,    1,    1,    1,    1,    1,    1,    1,   13,   10,
+        9,    8,    3,    2,   14,   14,   14,   14,   14,   14,
+       14,   14,   14
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -638,6 +638,9 @@ extern int yylex (void);
 #endif
 
 #define YY_RULE_SETUP \
+	if ( yyleng > 0 ) \
+		YY_CURRENT_BUFFER_LVALUE->yy_at_bol = \
+				(yytext[yyleng - 1] == '\n'); \
 	YY_USER_ACTION
 
 /** The main scanner function which does all the work.
@@ -677,7 +680,7 @@ YY_DECL
 	{
 #line 17 "zad4.l"
 
-#line 681 "lex.yy.c"
+#line 684 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -692,6 +695,7 @@ YY_DECL
 		yy_bp = yy_cp;
 
 		yy_current_state = (yy_start);
+		yy_current_state += YY_AT_BOL();
 yy_match:
 		do
 			{
@@ -704,13 +708,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 14 )
+				if ( yy_current_state >= 15 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 14 );
+		while ( yy_base[yy_current_state] != 15 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -748,28 +752,34 @@ case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
 #line 20 "zad4.l"
+{error = 4; handleInput();}
+	YY_BREAK
+case 4:
+/* rule 4 can match eol */
+YY_RULE_SETUP
+#line 21 "zad4.l"
 {handleInput();}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 21 "zad4.l"
-{handleInput(); return EOF;}
-	YY_BREAK
-case 4:
-YY_RULE_SETUP
 #line 22 "zad4.l"
-{printf("%s", yytext); fprintf(yyout, "%s", yytext);}
+{handleInput(); return EOF;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 23 "zad4.l"
-{printf("%s", yytext); fprintf(yyout, "%s", yytext); wrongSymbol=yytext[0]; error = 2;}
+{printf("%s", yytext); fprintf(yyout, "%s", yytext);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 24 "zad4.l"
+{printf("%s", yytext); fprintf(yyout, "%s", yytext); wrongSymbol=yytext[0]; error = 2;}
+	YY_BREAK
+case 7:
+YY_RULE_SETUP
+#line 25 "zad4.l"
 ECHO;
 	YY_BREAK
-#line 773 "lex.yy.c"
+#line 783 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1052,6 +1062,7 @@ static int yy_get_next_buffer (void)
 	char *yy_cp;
     
 	yy_current_state = (yy_start);
+	yy_current_state += YY_AT_BOL();
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
@@ -1064,7 +1075,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 14 )
+			if ( yy_current_state >= 15 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1092,11 +1103,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 14 )
+		if ( yy_current_state >= 15 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 13);
+	yy_is_jam = (yy_current_state == 14);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1211,6 +1222,8 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
+
+	YY_CURRENT_BUFFER_LVALUE->yy_at_bol = (c == '\n');
 
 	return c;
 }
@@ -1772,7 +1785,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 24 "zad4.l"
+#line 25 "zad4.l"
 
   
 #include <stdio.h>
@@ -1854,6 +1867,11 @@ int handleInput() {
         fprintf(yyout, "\nBłąd: dzielenie przez zero\n");
         countNumbers = 0;
     }
+    else if (error == 4) {
+        printf("\nBłąd: pusta linia\n");
+        fprintf(yyout, "\nBłąd: pusta linia\n");
+        countNumbers = 0;
+    }
     else {
         int value = pop(snp);
         int test = pop(snp);
@@ -1874,16 +1892,10 @@ int handleInput() {
 
 // driver code 
 int main() {
-    /* yyin and yyout as pointer
-    of File type */
-    extern FILE *yyin, *yyout;
-  
-    /* yyin points to the file input.txt
-    and opens it in read mode*/
+
+
     yyin = fopen("input.txt", "r");
-  
-    /* yyout points to the file output.txt
-    and opens it in write mode*/
+
     yyout = fopen("Output.txt", "w");
   
 

@@ -13,6 +13,10 @@ Comments must not appear within attribute values.
 Comments cannot be nested inside the other comments. 
 */
 
+// przpisać na stany
+
+
+
 %%
 "<?xml".*"?>"   {fprintf(yyout, "%s", yytext); xmlDeclaration = 1;}
 "<"             {fprintf(yyout, "%s", yytext); attributeCount++;}
@@ -20,7 +24,7 @@ Comments cannot be nested inside the other comments.
 "\""            {fprintf(yyout, "%s", yytext); stringCount++;}
 ("<!--").*("--")+.*("-->")  {fprintf(yyout, "%s", yytext);}
 ("<!--").*("--->")          {fprintf(yyout, "%s", yytext);}
-("<!--").*("-->")           {handleComment(yytext);}
+("<!--").*("-->")      {handleComment(yytext);}
 .               {fprintf(yyout, "%s", yytext); }
 %%
   
@@ -32,19 +36,12 @@ int handleComment(char* text) {
     }
 }
 // driver code 
-int main()
+int main(int argc, char *argv[])
 {
   
-    /* yyin and yyout as pointer
-    of File type */
-    extern FILE *yyin, *yyout;
-  
-    /* yyin points to the file input.txt
-    and opens it in read mode*/
+
     yyin = fopen("input.txt", "r");
   
-    /* yyout points to the file output.txt
-    and opens it in write mode*/
     yyout = fopen("Output.txt", "w");
   
     yylex();

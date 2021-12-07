@@ -24,9 +24,15 @@ Błąd: dzielenie przez zero
 Błąd: dzielenie przez zero
 4 2 3 + *
  = 20
-5 5 + + 5 5 -
-Błąd: za mała liczba argumentów
 5 5 + + 5 5 - -
 Błąd: za mała liczba argumentów
+
+Błąd: pusta linia
+5 5 + + 5 5 -
+Błąd: za mała liczba argumentów
+
+Błąd: pusta linia
 11 5 %
  = 1
+-0 2 3 + * 
+ = 0

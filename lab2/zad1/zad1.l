@@ -9,10 +9,10 @@
 
 
 %%
-^[\t|' ']*[\n]  {} //empty lines
-^[\t|' ']+      {} //remove whitespaces from begging
-[\t|' ']+$      {} //remove whitespaces from end
-[\t|' ']+       {lastWs = yytext[0]; lastWasWs = 1;} // multiple whitepaces
+^[\t' ']*[\n]  {}
+^[\t' ']+      {}
+[\t' ']+$      {}
+(\t|' ')+       {lastWs = yytext[0]; lastWasWs = 1;}
 [\n]            {linesCount++; fprintf(yyout, "%s", yytext);}
 [a-zA-Z]+       {checkWs(); wordsCount++; fprintf(yyout, "%s", yytext);}
 .               {checkWs(); fprintf(yyout, "%s", yytext);}
@@ -29,21 +29,19 @@ int checkWs() {
 }
 
 // driver code 
-int main()
+int main(int argc, char *argv[])
 {
   
-    /* yyin and yyout as pointer
-    of File type */
-    extern FILE *yyin, *yyout;
+    if (argc > 2) {
+        yyin = fopen(argv[1], "r");
+        yyout = fopen(argv[2], "w");
+    }
+    else {
+        yyin = fopen("input.txt", "r");
+        yyout = fopen("Output.txt", "w");
+    }
   
-    /* yyin points to the file input.txt
-    and opens it in read mode*/
-    yyin = fopen("input.txt", "r");
-  
-    /* yyout points to the file output.txt
-    and opens it in write mode*/
-    yyout = fopen("Output.txt", "w");
-  
+
     yylex();
 
     printf("lines: %8d\nwords: %8d\n", linesCount, wordsCount);

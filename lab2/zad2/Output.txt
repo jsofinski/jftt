@@ -7,7 +7,9 @@
     In CDATA <!-- everything is data!!! -->
   ]]>
   
-  
+   comment -->   comment -->
+   asbcx 123 s  asbcx 1234 s 
+   asbcx s 
   <!-- invalid -- comment -->
   <!-- B+, B, or B--->
   
