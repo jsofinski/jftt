@@ -1,0 +1,12 @@
+VAR
+    n, x
+BEGIN
+    READ n;
+    READ x;
+    FOR i FROM n TO x DO
+        WRITE i;
+        FOR j FROM 1 DOWNTO 0 DO
+            WRITE j;
+        ENDFOR
+    ENDFOR
+END

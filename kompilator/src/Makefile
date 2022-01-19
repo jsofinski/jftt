@@ -15,3 +15,23 @@ clean:
 test: gram
 	./gram test1.imp > test.mr 
 	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
+
+test1: gram
+	./gram ./tests/test1.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
+
+test2: gram
+	./gram ./tests/test2.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
+
+test3: gram
+	./gram ./tests/test3.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
+
+test4: gram
+	./gram ./tests/test4.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
+
+test5: gram
+	./gram ./tests/test5_3.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr

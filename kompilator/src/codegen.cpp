@@ -68,7 +68,7 @@ void set_register_a_to_value(i64 value) {
     push_line(RESET, helper);
     push_line(INC, helper); // do shiftowania a o 1
     push_line(RESET, reg);
-    int check = 16;
+    int check = 32768;
     int found = 0;
     while (check != 0) {
         if (found) {
@@ -142,6 +142,36 @@ void push_jumps(int jmp) {
     }
 }
 
+void push_jump_to(int type, int jump_to) {
+    switch (type) {
+        case cEQ:
+            push_line(JPOS, jump_to);
+            push_line(JNEG, jump_to);
+            break;
+        case cNEQ:
+            push_line(JZERO, jump_to);
+            break;
+        case cGE:
+            push_line(JNEG, jump_to);
+            push_line(JZERO, jump_to);
+            break;
+        case cLE:
+            push_line(JPOS, jump_to);
+            push_line(JZERO, jump_to);
+            break;
+        case cGEQ:
+            push_line(JNEG, jump_to);
+            break;
+        case cLEQ:
+            push_line(JPOS, jump_to);
+            break;
+    }
+}
+
+
+
+
+
 void Node::codegen() {}
 
 Program::Program(Node* commands) : commands(commands) {};
@@ -165,10 +195,14 @@ Assign::Assign(Identifier* id, Node* expression)
 {};
 
 void Assign::codegen() {
+    // Rg <= value
+    expression->codegen();
+    push_line(SWAP, 'g');
+
     set_register_a_to_value(id->id); // Ra = &identifier
-    push_line(SWAP, 'd'); // Rd <= &identifier
-    expression->codegen(); // Ra <= value
-    push_line(STORE, 'd'); // P(Rb) <= Ra
+    push_line(SWAP, 'g'); // value <=> &identifier
+
+    push_line(STORE, 'g'); // P(Rg) <= Ra
 }
 
 Expression::Expression(Node* bvalue, int symbol, Node* cvalue)
@@ -192,14 +226,96 @@ void Expression::codegen() {
             push_line(SUB, 'b');
         break;
         case eTIMES:
-            push_line(RESET, 'a');  
+            push_line(RESET, 'e');
+            push_line(RESET, 'f');
+            push_line(INC, 'e');
+            push_line(DEC, 'f');
+
+            /*
+                Re = 1 do shiftowania
+                Rf = -1 do shiftowania
+
+                Rd = wynik
+                Rc = prawa liczba
+                Rb = lewa liczba (shiftowana w prawo)
+                Ra = rejestr roboczy
+            */
+
+            cvalue->codegen();
+            push_line(SWAP, 'c');
+            bvalue->codegen();
+            push_line(SWAP, 'b');
+            push_line(RESET, 'd');
+
+            int jump_to_start = instruction_pointer;
+
+            // testuj najmniej znaczacy bit Rb
+            push_line(RESET, 'a');
+            push_line(ADD, 'b');
+
+            push_line(SHIFT, 'f');
+            push_line(SHIFT, 'e');
+            push_line(SUB, 'b');
+            // Ra to teraz -1 albo 0
+
+            prepare_jump(JZERO); // if (Rb % 2 != 0) {
+            // Rd += Rc
+            push_line(SWAP, 'd');
+            push_line(ADD, 'c');
+            push_line(SWAP, 'd');
+
+            backfill_jump(); // }
+
+            // przesun Rb o 1 w prawo
+            push_line(SWAP, 'b');
+            push_line(SHIFT, 'f');
+            push_line(SWAP, 'b');
+            // przesun Rc o 1 w lewo
+            push_line(SWAP, 'c');
+            push_line(SHIFT, 'e');
+            push_line(SWAP, 'c');
+
+            push_line(RESET, 'a');
+            push_line(ADD, 'b');
+
+            // jezeli Rb == 0, koniec iteracji, w Rd jest wynik
+            push_line(JPOS, - instruction_pointer + jump_to_start);
+            push_line(JNEG, - instruction_pointer + jump_to_start);
+            push_line(SWAP, 'd');
         break;
         case eDIV:
-            push_line(RESET, 'a');  
+            push_line(RESET, 'e');
+            push_line(RESET, 'f');
+            push_line(INC, 'e');
+            push_line(DEC, 'f');
+
+            /* Re = 1 do shiftowania
+               Rf = -1 do shiftowania
+            */
+            cvalue->codegen();
+            push_line(SWAP, 'c');
+            bvalue->codegen();
+            push_line(SWAP, 'b');
+            push_line(RESET, 'd');
+
+            // obliczanie log2(Rb) -> wynik leci do Rd
+            push_line(RESET, 'a');
+            push_line(RESET, 'd');
+
+            push_line(ADD, 'b');
+
+            int jump_here = instruction_pointer;
+
+            push_line(INC, 'd');
+            push_line(SHIFT, 'f');
+
+            push_line(JPOS, - instruction_pointer + jump_here);
+
+
         break;
-        case eMOD:
-            push_line(RESET, 'a');  
-        break;
+        // case eMOD:
+        //     push_line(RESET, 'a');  
+        // break;
     }      
 }
 
@@ -251,22 +367,91 @@ void IfThen::codegen() {
     }
 }
 
-While::While(Condition* condition, Commands* commands)
+While::While(Condition* condition, Node* commands)
 : condition{condition},
     commands{commands}
 {};
 
-Repeat::Repeat(Condition* condition, Commands* commands)
+void While::codegen() {
+    int jump_to_start = instruction_pointer;
+    condition->codegen();
+    int type = condition->symbol;
+
+    push_jumps(type);
+
+    commands->codegen();
+
+    push_line(JUMP, - instruction_pointer + jump_to_start);
+
+    if (type == cEQ || type == cGE || type == cLE) {
+        backfill_jump();
+        backfill_jump();
+    } else {
+        backfill_jump();
+    }
+}
+
+Repeat::Repeat(Node* commands, Condition* condition)
 : condition{condition},
     commands{commands}
 {};
-For::For(Node* identifier, Node* fromValue, Node* toValue, Node* commands, int step)
+
+void Repeat::codegen() {
+    int jump_to_start = instruction_pointer;
+    commands->codegen();
+    condition->codegen();
+    push_jump_to(condition->symbol, - instruction_pointer + jump_to_start);
+}
+
+For::For(Identifier* identifier, Node* fromValue, Node* toValue, Node* commands, int step)
 : identifier{identifier},
     fromValue{fromValue},
     toValue{toValue},
     commands{commands},
     step{step}
 {};
+
+void For::codegen() {
+    set_register_a_to_value(identifier->id); // Ra = &identifier
+    push_line(SWAP, 'd'); // Rd <= &identifier
+    fromValue->codegen();
+    push_line(STORE, 'd'); // P(Rd) <= Ra
+    
+    int jump_to_start = instruction_pointer;
+
+    set_register_a_to_value(identifier->id); // Ra = &identifier
+    push_line(LOAD, 'a'); // Ra <= P(Ra)
+    push_line(SWAP, 'f'); // P(Rh) <= Ra, current i
+    
+    toValue->codegen(); // Ra = &identifier
+    push_line(SUB, 'f'); // toValue - i
+    
+    if (step == 1) {
+        push_jumps(cGEQ); // if toValue - i != 0 Jump Outside loop
+    } else {
+        push_jumps(cLEQ); // if toValue - i != 0 Jump Outside loop
+    }
+
+    commands->codegen();
+
+
+    set_register_a_to_value(step); // a <= step
+    push_line(SWAP, 'b');  // Rb <= step
+    set_register_a_to_value(identifier->id); // Ra = &identifier
+    push_line(LOAD, 'a'); // Ra <= P(Ra)
+    push_line(ADD, 'b');   // Ra += step
+    push_line(SWAP, 'f');  // Rh <= current i 
+    set_register_a_to_value(identifier->id); // Ra = &identifier
+    push_line(SWAP, 'f');  // Ra <= current i && Rh <= &identifier
+    push_line(STORE, 'f'); // P(Ra) <= Ra
+
+
+    push_line(JUMP, - instruction_pointer + jump_to_start);
+    
+    backfill_jump();
+}
+
+
 
 Read::Read(Identifier* identifier) : identifier{identifier} {};
     
@@ -291,7 +476,8 @@ void Write::codegen() {
     push_line(PUT, 0);
 }
 
-    Num::Num(int value) : value{value} {};
+    
+Num::Num(int value) : value{value} {};
 
 void Num::codegen() {
     set_register_a_to_value(value);

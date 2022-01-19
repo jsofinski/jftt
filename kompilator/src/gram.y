@@ -69,20 +69,20 @@ command: identifier ASSIGN expression ';'    { $$ = new Assign($1, $3); }
         ENDIF { $$ = new IfThen($2, $4, NULL); }
     |   WHILE condition
         DO commands
-        ENDWHILE
+        ENDWHILE { $$ = new While($2, $4); }
     |   REPEAT commands
-        UNTIL condition ';'
+        UNTIL condition ';' { $$ = new Repeat($2, $4); }
     |   FOR identifier
         FROM bvalue
         TO cvalue
         DO commands
-        ENDFOR
+        ENDFOR { $$ = new For($2, $4, $6, $8, 1); }
     |   FOR identifier
         FROM bvalue
         DOWNTO cvalue
         DO commands
-        ENDFOR
-    |   READ identifier { $$ = new Read($2); }
+        ENDFOR { $$ = new For($2, $4, $6, $8, -1); }
+    |   READ identifier ';' { $$ = new Read($2); }
     |   WRITE NUM ';' { $$ = new Write($2); }
     |   WRITE identifier ';' { $$ = new Write($2); }
 ;

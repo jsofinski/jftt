@@ -1,0 +1,16 @@
+VAR
+    n
+BEGIN
+    n ASSIGN 1;
+    WHILE n LE 5 DO
+        WRITE n;
+        n ASSIGN n PLUS 1;
+    ENDWHILE
+
+
+    n ASSIGN 1;
+    REPEAT
+        WRITE n;
+        n ASSIGN n PLUS 1;
+    UNTIL n LE 5;
+END

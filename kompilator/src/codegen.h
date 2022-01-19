@@ -73,24 +73,30 @@ private:
 };
 class While : public Node {
 public:
-    While(Condition* condition, Commands* commands);
+    While(Condition* condition, Node* commands);
     Condition* condition;
-    Commands* commands;
+    Node* commands;
+
+    virtual void codegen();
 };
 class Repeat : public Node {
 public:
-    Repeat(Condition* condition, Commands* commands);
+    Repeat(Node* commands, Condition* condition);
     Condition* condition;
-    Commands* commands;
+    Node* commands;
+
+    virtual void codegen();
 };
 class For : public Node {
 public:
-    For(Node* identifier, Node* fromValue, Node* toValue, Node* commands, int step);
-    Node* identifier;
+    For(Identifier* identifier, Node* fromValue, Node* toValue, Node* commands, int step);
+    Identifier* identifier;
     Node* fromValue;
     Node* toValue;
     Node* commands;
     int step;
+    
+    virtual void codegen();
 };
 class Read : public Node {
 public:
