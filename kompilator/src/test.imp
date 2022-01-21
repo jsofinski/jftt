@@ -1,20 +1,12 @@
 VAR
-    n
+   n, sito[5:10], x
 BEGIN
-    n ASSIGN 10;
-    IF n LE 10 THEN
-        WRITE 1;
-    ELSE 
-        WRITE 0;
-    ENDIF
-    n ASSIGN 9;
-    IF n LE 10 THEN
-        IF n LE 9 THEN
-            WRITE 10;
-        ELSE 
-            WRITE 9;
-        ENDIF
-    ELSE 
-        WRITE 8;
-    ENDIF
+    n ASSIGN 2;
+    x ASSIGN 10;
+    sito[6] ASSIGN 2;
+
+    WHILE n LEQ x DO
+        WRITE n;
+        n ASSIGN n PLUS sito[6];
+    ENDWHILE
 END

@@ -1,6 +1,9 @@
 #pragma once
 
 void print_lines();
+void initArray(int id, int start, int end);
+void addVariable(int id);
+void assertVariableExists(int id);
 
 class Node {
 public:
@@ -10,9 +13,12 @@ public:
 class Identifier : public Node {
 public:
     Identifier(int id);
+    Identifier(int id, int trueValue, int value);
 
     virtual void codegen();
     int id;
+    int trueValue;
+    int value;
 };
 
 class Program : public Node {
@@ -122,3 +128,4 @@ public:
     virtual void codegen();
     int value;
 };
+    

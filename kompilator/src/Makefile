@@ -33,5 +33,5 @@ test4: gram
 	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
 
 test5: gram
-	./gram ./tests/test5_3.imp > test.mr 
+	./gram ./tests/test5_4.imp > test.mr 
 	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr

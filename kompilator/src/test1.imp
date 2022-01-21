@@ -1,21 +1,12 @@
 VAR
-    n
+	n, l, j, ta[1:4]
 BEGIN
-    n ASSIGN 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    n ASSIGN n TIMES 9;
-    WRITE n;
+	n  ASSIGN  25;
+	ta[1] ASSIGN  j;
+
+    WRITE ta[1];
+
+    FOR i FROM -3 TO 4 DO
+        WRITE ta[i];
+    ENDFOR
 END

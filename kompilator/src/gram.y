@@ -21,7 +21,7 @@
 }
 
 %token <intval> NUM
-%token <intval> PIDENTIFIER /* Simple identifier */
+%token <intval> PIDENTIFIER
 %token VAR BEGINX END
 %token ASSIGN IF THEN ELSE ENDIF
 %token WHILE DO ENDWHILE
@@ -51,10 +51,10 @@ program: VAR
         END                 { ASTroot = new Program($4); }
     |   BEGINX commands END { ASTroot = new Program($2); }
 ;
-declarations: declarations ',' PIDENTIFIER          {}
-    |   declarations ',' PIDENTIFIER'['NUM':'NUM']' {}
-    |   PIDENTIFIER                                 {}
-    |   PIDENTIFIER'['NUM':'NUM']'                  {}
+declarations: declarations ',' PIDENTIFIER          { addVariable($3); }
+    |   declarations ',' PIDENTIFIER'['NUM':'NUM']' { addVariable($3); }
+    |   PIDENTIFIER                                 { addVariable($1); }
+    |   PIDENTIFIER'['NUM':'NUM']'                  { addVariable($1); }
 ;
 commands: commands command  {$$ = new Commands($1, $2);}
     | command               {$$ = $1;}
@@ -96,21 +96,21 @@ expression: bvalue            { $$ = $1; }
 condition: bvalue conditionSymbol cvalue { $$ = new Condition($1, $2, $3); }
 ;
 conditionSymbol: EQ { $$ = cEQ; }
-    |   NEQ { $$ = cNEQ; }
-    |   LE { $$ = cLE; }
-    |   GE { $$ = cGE; }
-    |   LEQ { $$ = cLEQ; }
-    |   GEQ { $$ = cGEQ; }
+    |   NEQ         { $$ = cNEQ; }
+    |   LE          { $$ = cLE; }
+    |   GE          { $$ = cGE; }
+    |   LEQ         { $$ = cLEQ; }
+    |   GEQ         { $$ = cGEQ; }
 ;
 bvalue: NUM         { $$ = new Num($1); }
     | identifier    { $$ = $1; }
 ;
 cvalue: NUM         { $$ = new Num($1); }
-    | PIDENTIFIER    { $$ = new Identifier($1); /* TODO uzywaj `identifier` zmiast PIDENTIFIER */ }
+    | identifier    { $$ = $1; } // | PIDENTIFIER   { $$ = new Identifier($1); }
 ;
 identifier: PIDENTIFIER             { $$ = new Identifier($1); }
-    | PIDENTIFIER'['PIDENTIFIER']'  {}
-    | PIDENTIFIER'['NUM']'          {}
+    | PIDENTIFIER'['PIDENTIFIER']'  { $$ = new Identifier($1, 0, $3); }
+    | PIDENTIFIER'['NUM']'          { $$ = new Identifier($1, 1, $3); }
 
 %%
 
