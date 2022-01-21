@@ -288,26 +288,14 @@ void Expression::codegen() {
     switch(symbol) {
         case ePLUS: {
             cvalue->codegen();
-            // if (typeid(*cvalue) == typeid(Identifier)) {
-            //     push_line(LOAD, 'a');
-            // }
             push_line(SWAP, 'b');
             bvalue->codegen();
-            // if (typeid(*bvalue) == typeid(Identifier)) {
-            //     push_line(LOAD, 'a');
-            // }
             push_line(ADD, 'b');
         break; }
         case eMINUS: {
             cvalue->codegen();
-            // if (typeid(*cvalue) == typeid(Identifier)) {
-            //     push_line(LOAD, 'a');
-            // }
             push_line(SWAP, 'b');
             bvalue->codegen();
-            // if (typeid(*bvalue) == typeid(Identifier)) {
-            //     push_line(LOAD, 'a');
-            // }
             push_line(SUB, 'b');
         break; }
         case eTIMES: {
@@ -327,14 +315,8 @@ void Expression::codegen() {
             */
 
             cvalue->codegen();
-            // if (typeid(*cvalue) == typeid(Identifier)) {
-            //     push_line(LOAD, 'a');
-            // }
             push_line(SWAP, 'c');
             bvalue->codegen();
-            // if (typeid(*bvalue) == typeid(Identifier)) {
-            //     push_line(LOAD, 'a');
-            // }
             push_line(SWAP, 'b');
             push_line(RESET, 'd');
 
@@ -384,26 +366,257 @@ void Expression::codegen() {
                Rf = -1 do shiftowania
             */
             cvalue->codegen();
-            push_line(SWAP, 'c');
-            bvalue->codegen();
-            push_line(SWAP, 'b');
-            push_line(RESET, 'd');
 
-            // obliczanie log2(Rb) -> wynik leci do Rd
-            push_line(RESET, 'a');
-            push_line(RESET, 'd');
+            prepare_jump(JZERO); // if c == 0;
 
-            push_line(ADD, 'b');
+                push_line(SWAP, 'c');
+                bvalue->codegen();
+                push_line(SWAP, 'b');
+                push_line(RESET, 'd');
 
-            int jump_here = instruction_pointer;
 
-            push_line(INC, 'd');
-            push_line(SHIFT, 'f');
+                push_line(RESET, 'g'); // WYNIK
 
-            push_line(JPOS, - instruction_pointer + jump_here);
+                // obliczanie log2(Rb) - liczba cyfr -> wynik leci do Rd
+                push_line(RESET, 'a');
+                push_line(RESET, 'd');
+
+                push_line(ADD, 'b');
+
+                int jump_here = instruction_pointer;
+
+                push_line(INC, 'd');
+                push_line(SHIFT, 'f');
+
+                push_line(JPOS, - instruction_pointer + jump_here);
+
+                // Pętla odejmowania
+                jump_here = instruction_pointer;         
+
+                    push_line(RESET, 'a');
+                    push_line(RESET, 'h');      
+                    push_line(ADD, 'b');        // Ra = B
+                    push_line(SWAP, 'h');       // wynik iteracji
+                    
+                    push_line(ADD, 'd');          
+
+                        int jump_inner_here = instruction_pointer;    
+                        push_line(DEC, 'a');
+                        push_line(SWAP, 'h');       // Ra -> aktualny wynik, Rh -> pozostale przesuniecia, R 
+                        push_line(SHIFT, 'f');    
+                        push_line(SWAP, 'h');      //Ra -> pozostale iteracja Rh-> aktualnie pomniejszona  
+                        push_line(JPOS, - instruction_pointer + jump_inner_here);
+                        push_line(JZERO, - instruction_pointer + jump_inner_here);    
+
+                    // if Rh > Rc put 1 and shift result; else put 0 and shift
+                    push_line(SWAP, 'h');         
+                    push_line(SUB, 'c');
+                    
+                    prepare_jump(JNEG);      //RA reminder
+                        
+                        push_line(SWAP, 'h'); //RH reminder
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                            jump_inner_here = instruction_pointer; 
+                                push_line(SWAP, 'h'); 
+                                push_line(SHIFT, 'e');
+                                push_line(SWAP, 'h');  
+                                push_line(DEC, 'a');
+                            push_line(JPOS, - instruction_pointer + jump_inner_here);
+                            push_line(JZERO, - instruction_pointer + jump_inner_here);
+
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'h');
+                        push_line(ADD, 'b');
+                        push_line(SWAP, 'h');
+
+
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'b');
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                            jump_inner_here = instruction_pointer; 
+                                push_line(SWAP, 'b'); 
+                                push_line(SHIFT, 'f');
+                                push_line(SWAP, 'b');  
+                                push_line(DEC, 'a');
+                            push_line(JPOS, - instruction_pointer + jump_inner_here);
+                            push_line(JZERO, - instruction_pointer + jump_inner_here);
+
+
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                            jump_inner_here = instruction_pointer; 
+                                push_line(SWAP, 'b'); 
+                                push_line(SHIFT, 'e');
+                                push_line(SWAP, 'b');  
+                                push_line(DEC, 'a');
+                            push_line(JPOS, - instruction_pointer + jump_inner_here);
+                            push_line(JZERO, - instruction_pointer + jump_inner_here);
+
+                        push_line(SWAP, 'h');
+                        push_line(SUB, 'b');
+                        push_line(SWAP, 'b');
+                        
+                        push_line(INC, 'g');
+                    backfill_jump();
+                    
+                    push_line(SWAP, 'g');      
+                        push_line(SHIFT, 'e');    
+                    push_line(SWAP, 'g');      
+                    push_line(SWAP, 'h');                   
+
+                    push_line(DEC, 'd');    // Rd - liczba potrzebnych przesuniec
+                    push_line(RESET, 'a');
+                    push_line(ADD, 'd');
+                push_line(JPOS, - instruction_pointer + jump_here);
+                push_line(JZERO, - instruction_pointer + jump_here);  
+                
+                push_line(SWAP, 'b');
+                push_line(SUB, 'c');
+                prepare_jump(JNEG);
+                    push_line(INC, 'g');
+                backfill_jump();
+                // push_line(PUT, 0);
+                push_line(SWAP, 'b');
+                
+                push_line(SWAP, 'g');   
+            backfill_jump();
         break; }
         case eMOD: {
-            push_line(RESET, 'a');  
+            push_line(RESET, 'e');
+            push_line(RESET, 'f');
+            push_line(INC, 'e');
+            push_line(DEC, 'f');
+
+            /* Re = 1 do shiftowania
+               Rf = -1 do shiftowania
+            */
+            cvalue->codegen();
+
+            prepare_jump(JZERO); // if c == 0;
+
+                push_line(SWAP, 'c');
+                bvalue->codegen();
+                push_line(SWAP, 'b');
+                push_line(RESET, 'd');
+
+
+                push_line(RESET, 'g'); // WYNIK
+
+                // obliczanie log2(Rb) - liczba cyfr -> wynik leci do Rd
+                push_line(RESET, 'a');
+                push_line(RESET, 'd');
+
+                push_line(ADD, 'b');
+
+                int jump_here = instruction_pointer;
+
+                push_line(INC, 'd');
+                push_line(SHIFT, 'f');
+
+                push_line(JPOS, - instruction_pointer + jump_here);
+
+                // Pętla odejmowania
+                jump_here = instruction_pointer;         
+
+                    push_line(RESET, 'a');
+                    push_line(RESET, 'h');      
+                    push_line(ADD, 'b');        // Ra = B
+                    push_line(SWAP, 'h');       // wynik iteracji
+                    
+                    push_line(ADD, 'd');          
+
+                        int jump_inner_here = instruction_pointer;    
+                        push_line(DEC, 'a');
+                        push_line(SWAP, 'h');       // Ra -> aktualny wynik, Rh -> pozostale przesuniecia, R 
+                        push_line(SHIFT, 'f');    
+                        push_line(SWAP, 'h');      //Ra -> pozostale iteracja Rh-> aktualnie pomniejszona  
+                        push_line(JPOS, - instruction_pointer + jump_inner_here);
+                        push_line(JZERO, - instruction_pointer + jump_inner_here);    
+
+                    // if Rh > Rc put 1 and shift result; else put 0 and shift
+                    push_line(SWAP, 'h');         
+                    push_line(SUB, 'c');
+                    
+                    prepare_jump(JNEG);      //RA reminder
+                        
+                        push_line(SWAP, 'h'); //RH reminder
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                            jump_inner_here = instruction_pointer; 
+                                push_line(SWAP, 'h'); 
+                                push_line(SHIFT, 'e');
+                                push_line(SWAP, 'h');  
+                                push_line(DEC, 'a');
+                            push_line(JPOS, - instruction_pointer + jump_inner_here);
+                            push_line(JZERO, - instruction_pointer + jump_inner_here);
+
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'h');
+                        push_line(ADD, 'b');
+                        push_line(SWAP, 'h');
+
+
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'b');
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                            jump_inner_here = instruction_pointer; 
+                                push_line(SWAP, 'b'); 
+                                push_line(SHIFT, 'f');
+                                push_line(SWAP, 'b');  
+                                push_line(DEC, 'a');
+                            push_line(JPOS, - instruction_pointer + jump_inner_here);
+                            push_line(JZERO, - instruction_pointer + jump_inner_here);
+
+
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                            jump_inner_here = instruction_pointer; 
+                                push_line(SWAP, 'b'); 
+                                push_line(SHIFT, 'e');
+                                push_line(SWAP, 'b');  
+                                push_line(DEC, 'a');
+                            push_line(JPOS, - instruction_pointer + jump_inner_here);
+                            push_line(JZERO, - instruction_pointer + jump_inner_here);
+
+                        push_line(SWAP, 'h');
+                        push_line(SUB, 'b');
+                        push_line(SWAP, 'b');
+                        
+                        push_line(INC, 'g');
+                    backfill_jump();
+                    
+                    push_line(SWAP, 'g');      
+                        push_line(SHIFT, 'e');    
+                    push_line(SWAP, 'g');      
+                    push_line(SWAP, 'h');                   
+
+                    push_line(DEC, 'd');    // Rd - liczba potrzebnych przesuniec
+                    push_line(RESET, 'a');
+                    push_line(ADD, 'd');
+                push_line(JPOS, - instruction_pointer + jump_here);
+                push_line(JZERO, - instruction_pointer + jump_here);  
+                
+
+
+
+                push_line(RESET, 'a');
+                push_line(RESET, 'g');  
+                push_line(ADD, 'b');  
+                push_line(SWAP, 'g');
+
+                push_line(ADD, 'b'); 
+                push_line(SUB, 'c');
+
+                prepare_jump(JZERO);
+                prepare_jump(JPOS);
+                    push_line(SWAP, 'g');
+                backfill_jump();
+                backfill_jump();
+
+            backfill_jump();
         break; }
     }      
 }
@@ -614,68 +827,25 @@ Identifier::Identifier(i64 id) : id{id} {};
 Identifier::Identifier(i64 id, Node* value) : id(id), value(value) {};
 
 void Identifier::codegen() {  
-    if (value == NULL) {
-        set_register_a_to_value(id);
-        push_line(LOAD, 'a');
-    } else {                                            //  tab[-10:10] w pamięci pod P50
-        // value->codegen();                                tab[-5]
-        // if (trueValue == 1) {
-        //     set_register_a_to_value(value);             //  Ra = 6
-        // } 
-        // if (trueValue == 0) {
-        //     // printf("BIERZE Z PAMIĘCI\n");
-        //     set_register_a_to_value(value);             // P(Ra) = 9
-        //     push_line(LOAD, 'a'); // Ra = start index   // Ra = 9
-        //     push_line(PUT, 0);
-        // }
-                
-        value->codegen();         
-        push_line(SWAP, 'g'); // Rh = start index           Rg = -45 Ra = 0
-
-        set_register_a_to_value(id);                    //  Ra = 50
-
-        push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 50 Rg = -45    
-        push_line(LOAD, 'h'); // Ra = start index           Ra = -100 Rh = 50 Rg = -45
-
-        push_line(SWAP, 'h'); // True memory index          Ra = 50 Rh = -100 Rg = -45
-        push_line(INC, 'a'); // skip start value            Ra = 51
-        push_line(INC, 'a'); // skip end value              Ra = 52
-        push_line(ADD, 'g'); //                             Ra = 7
-        push_line(SUB, 'h'); //                             Ra = 107   
-        push_line(LOAD, 'a'); //                                
-
-        // push_line(INC, 'a'); // skip start value            Ra = -4
-        // push_line(INC, 'a'); // skip end value              Ra = -3
-        // push_line(SWAP, 'h'); // True memory index          Ra = 6 Rh = -3
-        // set_register_a_to_value(id);                    //  Ra = 16
-    }      
+    codegenGetIndex();
+    push_line(LOAD, 'a');
 }
 
 void Identifier::codegenGetIndex() {  
     if (value == NULL) {
         set_register_a_to_value(id);
-    } else {                                            //  tab[-20:30] w pamięci pod P0
-        // value->codegen();                                tab[-20]
-        // if (trueValue == 1) {
-        //     set_register_a_to_value(value);             //  Ra = 6
-        // } 
-        // if (trueValue == 0) {
-        //     // printf("BIERZE Z PAMIĘCI\n");
-        //     set_register_a_to_value(value);             // P(Ra) = 9
-        //     push_line(LOAD, 'a'); // Ra = start index   // Ra = 9
-        //     push_line(PUT, 0);
-        // }
-        value->codegen();                                   // Ra = -201                           
+    } else {        
+        value->codegen();                                   // Ra = -4                    
 
-        push_line(SWAP, 'g'); // Rh = start index           Rh = 2 Ra = 0
-        set_register_a_to_value(id); //                     Ra = 19
-        push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 6 Rg = 16  
-        push_line(LOAD, 'h'); // Ra = start index           Ra = 1 Rh = 6 Rg = 16
-        push_line(SWAP, 'h'); // True memory index          Ra = 16 Rh = 6 Rg = 1
-        push_line(INC, 'a'); // skip start value            Ra = 17
-        push_line(INC, 'a'); // skip end value              Ra = 18
-        push_line(ADD, 'g'); //                             Ra = 24
-        push_line(SUB, 'h'); //                             Ra = 23   
+        push_line(SWAP, 'g'); // Rh = start index           Rg = -4 Ra = 0
+        set_register_a_to_value(id); //                     Ra = 32
+        push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 32 Rg = -4  
+        push_line(LOAD, 'h'); // Ra = start index           Ra = -5 Rh = 32 Rg = -4
+        push_line(SWAP, 'h'); // True memory index          Ra = 32 Rh = -5 Rg = -4
+        push_line(INC, 'a'); // skip start value            Ra = 33
+        push_line(INC, 'a'); // skip end value              Ra = 34
+        push_line(ADD, 'g'); //                             Ra = 28
+        push_line(SUB, 'h'); //                             Ra = 33   
 
         // push_line(INC, 'a'); // skip start value            Ra = -4
         // push_line(INC, 'a'); // skip end value              Ra = -3

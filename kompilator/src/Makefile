@@ -12,8 +12,12 @@ gram: lex.yy.c gram.tab.c gram.tab.h codegen.cpp
 clean:
 	rm gram gram.tab.c lex.yy.c gram.tab.h
 
+testg: gram
+	./gram ./tests/zadane/7-loopiii.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
+
 test: gram
-	./gram test.imp > test.mr 
+	./gram test1.imp > test.mr 
 	./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
 
 test1: gram

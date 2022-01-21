@@ -1,20 +1,27 @@
 VAR
-    f[0:100], s[0:100], i[0:100], n, k, l
+    n , m , reszta , potega , dzielnik
 BEGIN
-    READ n;
-    f[0] ASSIGN 0;
-    s[0] ASSIGN 1;
-    i[0] ASSIGN 0;
-    f[1] ASSIGN 1;
-    s[1] ASSIGN 1;
-    i[1] ASSIGN 1;
-    FOR j FROM 2 TO n DO
-	k ASSIGN j MINUS 1;
-        l ASSIGN k MINUS 1;
-	i[j] ASSIGN i[k] PLUS 1;
-	f[j] ASSIGN f[k] PLUS f[l];
-        s[j] ASSIGN s[k] TIMES i[j];
-    ENDFOR
-    WRITE s[n];
-    WRITE f[n];
+    READ n ;
+    dzielnik ASSIGN 2;
+    m ASSIGN dzielnik TIMES dzielnik ;
+    WHILE n GEQ m DO
+        potega ASSIGN 0;
+        reszta ASSIGN n MOD dzielnik ;
+        WHILE reszta EQ 0 DO
+            n ASSIGN n DIV dzielnik ;
+            potega ASSIGN potega PLUS 1;
+            reszta ASSIGN n MOD dzielnik ;
+        ENDWHILE
+        IF potega GE 0 THEN
+            WRITE dzielnik ;
+            WRITE potega ;
+        ELSE
+            dzielnik ASSIGN dzielnik PLUS 1;
+            m ASSIGN dzielnik TIMES dzielnik ;
+        ENDIF
+    ENDWHILE
+    IF n NEQ 1 THEN 
+        WRITE n ;
+        WRITE 1;
+    ENDIF
 END

@@ -28,7 +28,7 @@
     int pushStrs() {
         for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
-                strs[i+1] = "ABCiteratorXYZ";
+                strs[i+1] = "ABCiteratorXYZ"; 
                 currentIndex++;
                 return 0;
             }
@@ -90,8 +90,9 @@ DIGIT [0-9]
 ID [a-z][a-z0-9]*
 
 %%
--{DIGIT}+        { yylval.intval = atoi(yytext); return(NUM); }
-{DIGIT}+        { yylval.intval = atoi(yytext); return(NUM); printf("%s", yytext); }
+"("[^()]*")"        {}
+-{DIGIT}+        { yylval.intval = atoll(yytext); return(NUM); }
+{DIGIT}+        { yylval.intval = atoll(yytext); return(NUM); printf("%s", yytext); }
 VAR             { return(VAR);  }
 BEGIN           { return(BEGINX); }
 END             { return(END); }
