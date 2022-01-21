@@ -3,9 +3,10 @@
     #include "codegen.h"
     #include "gram.tab.h"
 
-    char *strs[1000] = {0};
-    int str_to_id_int(char *yytext) {
-        for(int i = 0; i < 1000; i++) {
+    i64 size = 2147483647;
+    char *strs[14748] = {0};
+    i64 str_to_id_int(char *yytext) {
+        for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
                 strs[i] = strdup(yytext);
                 // printf("%d: %s\n", i, strs[i]);
@@ -17,9 +18,16 @@
         }
         return -1;
     }
-    int arrayDeclare(char *yytext) {
-        
-        
+    int pushStrs() {
+        for(i64 i = 0; i < size; i++) {
+            if (strs[i] == NULL) {
+                strs[i+1] = "ABCiteratorXYZ";
+                return 0;
+            }
+        }
+        return 0;
+    }
+    i64 arrayDeclare(char *yytext) {
         char* name = strtok(yytext, "[");
         // printf("name: %s\n", name);
 
@@ -36,12 +44,12 @@
 
         /* printf("xxx%sxxx\n", yytext); */
         
-        for(int i = 0; i < 1000; i++) {
+        for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
                 // nie znaleziono
                 strs[i] = strdup(yytext);
                 strs[i+1] = strdup(yytext);
-                for (int j = i+2; j < (i + 2 + end - start + 1); j++) {
+                for (i64 j = i+2; j < (i + 2 + end - start + 1); j++) {
                     strs[j] = strdup(yytext);
                 }
                 // printf("%d: %s\n", i, strs[i]);
@@ -54,7 +62,7 @@
         return -1;
     }
     void prtintall() {
-        for(int i = 0; i < 1000; i++) {
+        for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
                 break;
             } else {
@@ -84,7 +92,7 @@ DO              { return(DO); }
 ENDWHILE        { return(ENDWHILE); }
 REPEAT          { return(REPEAT); }
 UNTIL           { return(UNTIL); }
-FOR             { return(FOR); }
+FOR             { pushStrs(); return(FOR); }
 FROM            { return(FROM); }
 TO              { return(TO); }
 DOWNTO          { return(DOWNTO); }

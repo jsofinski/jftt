@@ -7,7 +7,7 @@
 
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
-typedef int i64;
+typedef long long i64;
 int variablesNumber = 0;
 int variables[100] = {};
 int iteratorsNumber = 0;
@@ -51,9 +51,9 @@ void print_lines() {
                 instructions[i].op == JPOS ||
                 instructions[i].op == JNEG ||
                 instructions[i].op == JUMP) {
-            printf("%s %d", names[instructions[i].op], instructions[i].arg);
+            printf("%s %lld", names[instructions[i].op], instructions[i].arg);
         } else {
-            printf("%s %c", names[instructions[i].op], instructions[i].arg);
+            printf("%s %c", names[instructions[i].op], (int) instructions[i].arg);
         }
 
         if(instructions[i].comment != NULL) {
@@ -81,7 +81,10 @@ void set_register_a_to_value(i64 value) {
     push_line(RESET, helper);
     push_line(INC, helper); // do shiftowania a o 1
     push_line(RESET, reg);
-    int check = 32768;
+    i64 check = 1073741824;
+    while ( check < value ) {
+        check = check * 2;
+    }
     int found = 0;
     while (check != 0) {
         if (found) {
@@ -181,7 +184,7 @@ void push_jump_to(int type, int jump_to) {
     }
 }
 
-void initArray(int id, int start, int end) {
+void initArray(int id, i64 start, i64 end) {
     // printf("initarray \n");
     // printf("%d \n", id);
     // printf("%d \n", start);
@@ -262,18 +265,17 @@ void Assign::codegen() {
 
     // Rg <= value
     expression->codegen();
-    if (typeid(*expression) == typeid(Identifier)) {
-        push_line(LOAD, 'a'); // P(Rg) <= Ra
-    }
-    push_line(SWAP, 'g'); // value <=> &identifier
+    
+    // if (typeid(*expression) == typeid(Identifier)) {
+    //     push_line(LOAD, 'a'); // P(Rg) <= Ra
+    // }
+    push_line(SWAP, 'f'); // value <=> &identifier
+
+    id->codegenGetIndex();
 
     
-    // set_register_a_to_value(id->id); // Ra = &identifier
-    id->codegen();
-
-    push_line(SWAP, 'g'); // value <=> &identifier
-
-    push_line(STORE, 'g'); // P(Rg) <= Ra
+    push_line(SWAP, 'f'); // value <=> &identifier
+    push_line(STORE, 'f'); // P(Rg) <= Ra
 }
 
 Expression::Expression(Node* bvalue, int symbol, Node* cvalue)
@@ -286,26 +288,26 @@ void Expression::codegen() {
     switch(symbol) {
         case ePLUS: {
             cvalue->codegen();
-            if (typeid(*cvalue) == typeid(Identifier)) {
-                push_line(LOAD, 'a');
-            }
+            // if (typeid(*cvalue) == typeid(Identifier)) {
+            //     push_line(LOAD, 'a');
+            // }
             push_line(SWAP, 'b');
             bvalue->codegen();
-            if (typeid(*bvalue) == typeid(Identifier)) {
-                push_line(LOAD, 'a');
-            }
+            // if (typeid(*bvalue) == typeid(Identifier)) {
+            //     push_line(LOAD, 'a');
+            // }
             push_line(ADD, 'b');
         break; }
         case eMINUS: {
             cvalue->codegen();
-            if (typeid(*cvalue) == typeid(Identifier)) {
-                push_line(LOAD, 'a');
-            }
+            // if (typeid(*cvalue) == typeid(Identifier)) {
+            //     push_line(LOAD, 'a');
+            // }
             push_line(SWAP, 'b');
             bvalue->codegen();
-            if (typeid(*bvalue) == typeid(Identifier)) {
-                push_line(LOAD, 'a');
-            }
+            // if (typeid(*bvalue) == typeid(Identifier)) {
+            //     push_line(LOAD, 'a');
+            // }
             push_line(SUB, 'b');
         break; }
         case eTIMES: {
@@ -325,14 +327,14 @@ void Expression::codegen() {
             */
 
             cvalue->codegen();
-            if (typeid(*cvalue) == typeid(Identifier)) {
-                push_line(LOAD, 'a');
-            }
+            // if (typeid(*cvalue) == typeid(Identifier)) {
+            //     push_line(LOAD, 'a');
+            // }
             push_line(SWAP, 'c');
             bvalue->codegen();
-            if (typeid(*bvalue) == typeid(Identifier)) {
-                push_line(LOAD, 'a');
-            }
+            // if (typeid(*bvalue) == typeid(Identifier)) {
+            //     push_line(LOAD, 'a');
+            // }
             push_line(SWAP, 'b');
             push_line(RESET, 'd');
 
@@ -414,14 +416,14 @@ Condition::Condition(Node* bvalue, int symbol, Node* cvalue)
 
 void Condition::codegen() {
     cvalue->codegen();
-    if (typeid(*cvalue) == typeid(Identifier)) {
-        push_line(LOAD, 'a');
-    }
+    // if (typeid(*cvalue) == typeid(Identifier)) {
+    //     push_line(LOAD, 'a');
+    // }
     push_line(SWAP, 'b');
     bvalue->codegen();
-    if (typeid(*bvalue) == typeid(Identifier)) {
-        push_line(LOAD, 'a');
-    }
+    // if (typeid(*bvalue) == typeid(Identifier)) {
+    //     push_line(LOAD, 'a');
+    // }
     push_line(SUB, 'b');
 }
 
@@ -519,14 +521,12 @@ void For::codegen() {
     set_register_a_to_value(identifier->id); // Ra = &identifier
     push_line(SWAP, 'd'); // Rd <= &identifier
     fromValue->codegen();
-
-    if (typeid(*fromValue) == typeid(Identifier)) {
-        push_line(LOAD, 'a');
-    }
-
-
     push_line(STORE, 'd'); // P(Rd) <= Ra
     
+    toValue->codegen(); // Ra = &identifier
+    push_line(INC, 'd'); // P(Rd) <= Ra
+    push_line(STORE, 'd'); // P(Rd) <= Ra
+
     int jump_to_start = instruction_pointer;
 
     set_register_a_to_value(identifier->id); // Ra = &identifier
@@ -534,10 +534,15 @@ void For::codegen() {
     push_line(SWAP, 'f'); // P(Rh) <= Ra, current i
     
     toValue->codegen(); // Ra = &identifier
-    if (typeid(*toValue) == typeid(Identifier)) {
-        push_line(LOAD, 'a');
-    }
 
+    set_register_a_to_value(identifier->id); // Ra = &identifier
+    push_line(INC, 'a'); // P(Ra) = to value
+    push_line(LOAD, 'a'); // Ra = to value
+    
+    // if (typeid(*toValue) == typeid(Identifier)) {
+    //     push_line(LOAD, 'a');
+    // }
+    
     push_line(SUB, 'f'); // toValue - i
     
     if (step == 1) {
@@ -581,7 +586,7 @@ void Read::codegen() {
     push_line(STORE, 'b'); // P(Rb) = Ra
 }
 
-Write::Write(int intval) : value{NULL}, intval(intval) {};
+Write::Write(i64 intval) : value{NULL}, intval(intval) {};
 Write::Write(Node* value) : value{value} {};
 
 void Write::codegen() {      
@@ -593,8 +598,7 @@ void Write::codegen() {
         }      
     }
     if (value != NULL) {  
-        value->codegen();
-        push_line(LOAD, 'a');    
+        value->codegen();    
     } else {
         set_register_a_to_value(intval); 
     }
@@ -602,42 +606,80 @@ void Write::codegen() {
 }
 
     
-Num::Num(int value) : value{value} {};
+Num::Num(i64 value) : value{value} {};
 
 void Num::codegen() {
     set_register_a_to_value(value);
 }
 
-Identifier::Identifier(int id) : id{id} {};
-Identifier::Identifier(int id, int trueValue, int value) : id(id), trueValue(trueValue), value(value) {};
+Identifier::Identifier(i64 id) : id{id} {};
+Identifier::Identifier(i64 id, Node* value) : id(id), value(value) {};
 
 void Identifier::codegen() {  
     if (value == NULL) {
         set_register_a_to_value(id);
-        // push_line(LOAD, 'a');
-    } else {                                            //  tab[1:6] w pamięci pod P16
-        // value->codegen();                                tab[6]
-        if (trueValue == 1) {
-            set_register_a_to_value(value);             //  Ra = 6
-        } 
-        if (trueValue == 0) {
-            // printf("BIERZE Z PAMIĘCI\n");
-            set_register_a_to_value(value);             // P(Ra) = 9
-            push_line(LOAD, 'a'); // Ra = start index   // Ra = 9
-            push_line(PUT, 0);
-        }
-        push_line(SWAP, 'h'); // Rh = start index           Rh = 6 Ra = 0
-        set_register_a_to_value(id);                    //  Ra = 16
-        push_line(SWAP, 'g'); // True memory index          Ra = 0 Rh = 6 Rg = 16  
-        push_line(LOAD, 'g'); // Ra = start index           Ra = 1 Rh = 6 Rg = 16
-        push_line(SWAP, 'g'); // True memory index          Ra = 16 Rh = 6 Rg = 1
+        push_line(LOAD, 'a');
+    } else {                                            //  tab[-100:200] w pamięci pod P50
+        // value->codegen();                                tab[-45]
+        // if (trueValue == 1) {
+        //     set_register_a_to_value(value);             //  Ra = 6
+        // } 
+        // if (trueValue == 0) {
+        //     // printf("BIERZE Z PAMIĘCI\n");
+        //     set_register_a_to_value(value);             // P(Ra) = 9
+        //     push_line(LOAD, 'a'); // Ra = start index   // Ra = 9
+        //     push_line(PUT, 0);
+        // }
+                
+        value->codegen();         
+        push_line(SWAP, 'g'); // Rh = start index           Rg = -45 Ra = 0
+
+        set_register_a_to_value(id);                    //  Ra = 50
+
+        push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 50 Rg = -45    
+        push_line(LOAD, 'h'); // Ra = start index           Ra = -100 Rh = 50 Rg = -45
+        push_line(PUT, 0);  
+
+        push_line(SWAP, 'h'); // True memory index          Ra = 50 Rh = -100 Rg = -45
+        push_line(INC, 'a'); // skip start value            Ra = 51
+        push_line(INC, 'a'); // skip end value              Ra = 52
+        push_line(ADD, 'g'); //                             Ra = 7
+        push_line(SUB, 'h'); //                             Ra = 107   
+        push_line(LOAD, 'a'); //                                
+
+        // push_line(INC, 'a'); // skip start value            Ra = -4
+        // push_line(INC, 'a'); // skip end value              Ra = -3
+        // push_line(SWAP, 'h'); // True memory index          Ra = 6 Rh = -3
+        // set_register_a_to_value(id);                    //  Ra = 16
+    }      
+}
+
+void Identifier::codegenGetIndex() {  
+    if (value == NULL) {
+        set_register_a_to_value(id);
+    } else {                                            //  tab[-20:30] w pamięci pod P0
+        // value->codegen();                                tab[-20]
+        // if (trueValue == 1) {
+        //     set_register_a_to_value(value);             //  Ra = 6
+        // } 
+        // if (trueValue == 0) {
+        //     // printf("BIERZE Z PAMIĘCI\n");
+        //     set_register_a_to_value(value);             // P(Ra) = 9
+        //     push_line(LOAD, 'a'); // Ra = start index   // Ra = 9
+        //     push_line(PUT, 0);
+        // }
+        value->codegen();                                   // Ra = -20
+                           
+
+        push_line(SWAP, 'g'); // Rh = start index           Rh = 2 Ra = 0
+        set_register_a_to_value(id); //                     Ra = 19
+        push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 6 Rg = 16  
+        push_line(LOAD, 'h'); // Ra = start index           Ra = 1 Rh = 6 Rg = 16
+        push_line(SWAP, 'h'); // True memory index          Ra = 16 Rh = 6 Rg = 1
         push_line(INC, 'a'); // skip start value            Ra = 17
         push_line(INC, 'a'); // skip end value              Ra = 18
-        push_line(ADD, 'h'); //                             Ra = 24
-        push_line(SUB, 'g'); //                             Ra = 23   
-
-
-
+        push_line(ADD, 'g'); //                             Ra = 24
+        push_line(SUB, 'h'); //                             Ra = 23   
 
         // push_line(INC, 'a'); // skip start value            Ra = -4
         // push_line(INC, 'a'); // skip end value              Ra = -3

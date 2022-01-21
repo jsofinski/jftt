@@ -14,7 +14,7 @@
 %}
 
 %union { 
-    int intval;
+    i64 intval;
     Node* node;
     Identifier* idf;
     Condition* cond;
@@ -109,8 +109,8 @@ cvalue: NUM         { $$ = new Num($1); }
     | identifier    { $$ = $1; } // | PIDENTIFIER   { $$ = new Identifier($1); }
 ;
 identifier: PIDENTIFIER             { $$ = new Identifier($1); }
-    | PIDENTIFIER'['PIDENTIFIER']'  { $$ = new Identifier($1, 0, $3); }
-    | PIDENTIFIER'['NUM']'          { $$ = new Identifier($1, 1, $3); }
+    | PIDENTIFIER'['PIDENTIFIER']'  { $$ = new Identifier($1, new Identifier($3)); }
+    | PIDENTIFIER'['NUM']'          { $$ = new Identifier($1, new Num($3)); }
 
 %%
 

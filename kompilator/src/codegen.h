@@ -1,7 +1,9 @@
 #pragma once
 
+typedef long long i64;
+
 void print_lines();
-void initArray(int id, int start, int end);
+void initArray(int id, i64 start, i64 end);
 void addVariable(int id);
 void assertVariableExists(int id);
 
@@ -12,13 +14,13 @@ public:
 
 class Identifier : public Node {
 public:
-    Identifier(int id);
-    Identifier(int id, int trueValue, int value);
+    Identifier(i64 id);
+    Identifier(i64 id, Node* value);
 
     virtual void codegen();
-    int id;
-    int trueValue;
-    int value;
+    virtual void codegenGetIndex();
+    i64 id;
+    Node* value;
 };
 
 class Program : public Node {
@@ -114,18 +116,18 @@ public:
 class Write : public Node {
 public:
     Write(Node* value);
-    Write(int intval);
+    Write(i64 intval);
 
     virtual void codegen();
 private:
-    int intval;
+    i64 intval;
     Node* value;
 };
 class Num : public Node {
 public:
-    Num(int value);
+    Num(i64 value);
 
     virtual void codegen();
-    int value;
+    i64 value;
 };
     

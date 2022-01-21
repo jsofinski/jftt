@@ -97,7 +97,7 @@ union YYSTYPE
 {
 #line 16 "gram.y"
  
-    int intval;
+    i64 intval;
     Node* node;
     Identifier* idf;
     Condition* cond;

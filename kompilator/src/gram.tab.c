@@ -1424,13 +1424,13 @@ yyreduce:
 
   case 38: /* identifier: PIDENTIFIER '[' PIDENTIFIER ']'  */
 #line 112 "gram.y"
-                                    { (yyval.idf) = new Identifier((yyvsp[-3].intval), 0, (yyvsp[-1].intval)); }
+                                    { (yyval.idf) = new Identifier((yyvsp[-3].intval), new Identifier((yyvsp[-1].intval))); }
 #line 1429 "gram.tab.c"
     break;
 
   case 39: /* identifier: PIDENTIFIER '[' NUM ']'  */
 #line 113 "gram.y"
-                                    { (yyval.idf) = new Identifier((yyvsp[-3].intval), 1, (yyvsp[-1].intval)); }
+                                    { (yyval.idf) = new Identifier((yyvsp[-3].intval), new Num((yyvsp[-1].intval))); }
 #line 1435 "gram.tab.c"
     break;
 

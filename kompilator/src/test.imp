@@ -1,12 +1,19 @@
 VAR
-   n, sito[5:10], x
+   n, sito[5:10], tab[5:10], x, k
 BEGIN
     n ASSIGN 2;
-    x ASSIGN 10;
-    sito[6] ASSIGN 2;
+    x ASSIGN 7;
 
-    WHILE n LEQ x DO
-        WRITE n;
-        n ASSIGN n PLUS sito[6];
-    ENDWHILE
+    k ASSIGN n PLUS x;
+    k ASSIGN k MINUS 1;
+    WRITE k;
+    WRITE 0;
+    
+    sito[5] ASSIGN 100;
+    WRITE sito[5];
+    sito[x] ASSIGN 120;
+    WRITE sito[x];
+    sito[5] ASSIGN 100;
+    WRITE sito[5];
+    
 END
