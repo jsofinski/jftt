@@ -1,11 +1,9 @@
 VAR
-  tab[-1000:1000],
+  tab[-987654321:1234567890],
   a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
 BEGIN
-
-  READ tab[-1000];
-  READ tab[-1000];
-  a ASSIGN tab[-1000];
+  READ tab[-121212121];
+  a ASSIGN tab[-121212121];
   b ASSIGN a;
   c ASSIGN b PLUS a;
   d ASSIGN c PLUS b;
@@ -32,6 +30,6 @@ BEGIN
   y ASSIGN x PLUS w;
   z ASSIGN y PLUS x;
   a ASSIGN 10000 TIMES z;
-  tab[1000] ASSIGN z;
-  WRITE tab[1000];
+  tab[a] ASSIGN z;
+  WRITE tab[a];
 END

@@ -13,7 +13,7 @@ clean:
 	rm gram gram.tab.c lex.yy.c gram.tab.h
 
 test: gram
-	./gram test1.imp > test.mr 
+	./gram test.imp > test.mr 
 	./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
 
 test1: gram

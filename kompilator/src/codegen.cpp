@@ -578,10 +578,8 @@ void For::codegen() {
 Read::Read(Identifier* identifier) : identifier{identifier} {};
     
 void Read::codegen() {
-    push_line(RESET, 'b'); // Rb = 0
-    for(int i = 0; i < identifier->id; i++) {
-        push_line(INC, 'b');
-    } // Rb = &identifier
+    identifier->codegenGetIndex();
+    push_line(SWAP, 'b'); // P(Rb) = Ra
     push_line(GET, 0); // Ra = z klawiatury
     push_line(STORE, 'b'); // P(Rb) = Ra
 }
@@ -619,8 +617,8 @@ void Identifier::codegen() {
     if (value == NULL) {
         set_register_a_to_value(id);
         push_line(LOAD, 'a');
-    } else {                                            //  tab[-100:200] w pamięci pod P50
-        // value->codegen();                                tab[-45]
+    } else {                                            //  tab[-10:10] w pamięci pod P50
+        // value->codegen();                                tab[-5]
         // if (trueValue == 1) {
         //     set_register_a_to_value(value);             //  Ra = 6
         // } 
@@ -638,7 +636,6 @@ void Identifier::codegen() {
 
         push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 50 Rg = -45    
         push_line(LOAD, 'h'); // Ra = start index           Ra = -100 Rh = 50 Rg = -45
-        push_line(PUT, 0);  
 
         push_line(SWAP, 'h'); // True memory index          Ra = 50 Rh = -100 Rg = -45
         push_line(INC, 'a'); // skip start value            Ra = 51
@@ -668,8 +665,7 @@ void Identifier::codegenGetIndex() {
         //     push_line(LOAD, 'a'); // Ra = start index   // Ra = 9
         //     push_line(PUT, 0);
         // }
-        value->codegen();                                   // Ra = -20
-                           
+        value->codegen();                                   // Ra = -201                           
 
         push_line(SWAP, 'g'); // Rh = start index           Rh = 2 Ra = 0
         set_register_a_to_value(id); //                     Ra = 19

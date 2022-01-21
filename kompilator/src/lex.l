@@ -4,16 +4,23 @@
     #include "gram.tab.h"
 
     i64 size = 2147483647;
-    char *strs[14748] = {0};
+    int maxSize = 1000;
+    i64 currentIndex = 0;
+
+    i64 indexMap[1000] = {0};
+    char *strs[1000] = {0};
+
     i64 str_to_id_int(char *yytext) {
-        for(i64 i = 0; i < size; i++) {
+        for(i64 i = 0; i < maxSize; i++) {
             if (strs[i] == NULL) {
                 strs[i] = strdup(yytext);
                 // printf("%d: %s\n", i, strs[i]);
-                return i;
+                indexMap[i] = currentIndex;
+                currentIndex++;
+                return indexMap[i];
             } else if (strcmp(strs[i], yytext) == 0) {
                 // printf("%d: %s\n", i, strs[i]);
-                return i;
+                return indexMap[i];
             }
         }
         return -1;
@@ -22,6 +29,7 @@
         for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
                 strs[i+1] = "ABCiteratorXYZ";
+                currentIndex++;
                 return 0;
             }
         }
@@ -30,10 +38,8 @@
     i64 arrayDeclare(char *yytext) {
         char* name = strtok(yytext, "[");
         // printf("name: %s\n", name);
-
         int start = atoi(strtok(NULL, ":"));
         // printf("start: %d\n", start);
-
         int end = atoi(strtok(NULL, "]"));
         // printf("end: %d\n", end);
 
@@ -48,10 +54,17 @@
             if (strs[i] == NULL) {
                 // nie znaleziono
                 strs[i] = strdup(yytext);
+                indexMap[i] = currentIndex;
+                currentIndex++;
+
                 strs[i+1] = strdup(yytext);
+                indexMap[i+1] = currentIndex;
+                currentIndex++;
+
                 for (i64 j = i+2; j < (i + 2 + end - start + 1); j++) {
-                    strs[j] = strdup(yytext);
+                    currentIndex++;
                 }
+                currentIndex += 2;
                 // printf("%d: %s\n", i, strs[i]);
                 initArray(i, start, end);
                 return i;
@@ -61,12 +74,12 @@
         }
         return -1;
     }
-    void prtintall() {
+    void printall() {
         for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
                 break;
             } else {
-                printf("%s\n", strs[i]);
+                printf("%s %d\n", strs[i], indexMap[i]);
             }
 
         }
