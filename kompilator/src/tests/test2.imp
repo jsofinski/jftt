@@ -1,16 +1,8 @@
 VAR
-    n
+    x, y, z
 BEGIN
-    n ASSIGN 1;
-    WHILE n LE 5 DO
-        WRITE n;
-        n ASSIGN n PLUS 1;
-    ENDWHILE
-
-
-    n ASSIGN 1;
-    REPEAT
-        WRITE n;
-        n ASSIGN n PLUS 1;
-    UNTIL n LE 5;
+    x ASSIGN 120;
+    y ASSIGN 120;
+    z ASSIGN x DIV y;
+    WRITE z;
 END

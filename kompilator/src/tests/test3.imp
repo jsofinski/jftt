@@ -1,24 +1,8 @@
 VAR
-    n
+    x, y, z
 BEGIN
-    n ASSIGN 10;
-    IF n LE 10 THEN
-        WRITE 1;
-    ELSE 
-        WRITE 0;
-    ENDIF
-    n ASSIGN 9;
-    IF n LE 10 THEN
-        IF n LE 9 THEN
-            WRITE 10;
-        ELSE 
-            IF -1 LE -2 THEN
-                WRITE 0;
-            ELSE 
-                WRITE 1;
-            ENDIF
-        ENDIF
-    ELSE 
-        WRITE 8;
-    ENDIF
+    x ASSIGN 120;
+    y ASSIGN 120;
+    z ASSIGN x DIV y;
+    WRITE z;
 END

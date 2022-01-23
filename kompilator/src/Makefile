@@ -17,8 +17,8 @@ testg: gram
 	./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
 
 test: gram
-	./gram test1.imp > test.mr 
-	./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
+	./gram test.imp > test.mr 
+	./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
 
 test1: gram
 	./gram ./tests/test1.imp > test.mr 
