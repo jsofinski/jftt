@@ -397,13 +397,7 @@ void Expression::codegen() {
                     push_line(ADD, 'b');        // Ra = B
                     push_line(SWAP, 'h');       // wynik iteracji
                     
-                        // for (int i = a; i < a; i++) Rh << 1
-                        // Rh << a
-                        // RESET a
-                        // SUB h
-
                     // Rh = Rh >> Rd - 1
-                    int jump_inner_here;
                     push_line(RESET, 'a'); // Ra = Rd (liczba cyfr)
                     push_line(SUB, 'd'); // Ra = Rd (liczba cyfr)
                     push_line(DEC, 'a'); // Ra = Rd (liczba cyfr)
@@ -419,67 +413,39 @@ void Expression::codegen() {
                     prepare_jump(JNEG);      //RA reminder
                         
                         push_line(SWAP, 'h'); //RH reminder
-                        // push_line(RESET, 'a');
-                        // push_line(ADD, 'd');
-                            // jump_inner_here = instruction_pointer; 
-                                // push_line(SWAP, 'h'); 
-                                // push_line(SHIFT, 'e');
-                                // push_line(SWAP, 'h');  
-                                // push_line(DEC, 'a');
-                            // push_line(JPOS, - instruction_pointer + jump_inner_here);
-                            // push_line(JZERO, - instruction_pointer + jump_inner_here);
 
-                            // Rh = Rh << Rd + 1
-                            push_line(RESET, 'a');
-                            push_line(ADD, 'd');
-                            push_line(INC, 'a');
-                            push_line(SWAP, 'h');
-                            push_line(SHIFT, 'h');
-                            push_line(SWAP, 'h');
-                            push_line(RESET, 'a');
+                        //  Rh = Rh << Rd - 1
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                        push_line(INC, 'a');
+                        push_line(SWAP, 'h');
+                        push_line(SHIFT, 'h');
+                        push_line(SWAP, 'h');
+                        push_line(RESET, 'a');
 
+                        // Rh = Rh + Rb
                         push_line(RESET, 'a');
                         push_line(ADD, 'h');
                         push_line(ADD, 'b');
                         push_line(SWAP, 'h');
 
-
+                        // Rb = Rb >> Rd + 1
                         push_line(RESET, 'a');
-                        // push_line(ADD, 'd');
-                            // jump_inner_here = instruction_pointer; 
-                            //     push_line(SWAP, 'b'); 
-                            //     push_line(SHIFT, 'f');
-                            //     push_line(SWAP, 'b');  
-                            //     push_line(DEC, 'a');
-                            // push_line(JPOS, - instruction_pointer + jump_inner_here);
-                            // push_line(JZERO, - instruction_pointer + jump_inner_here);
-
-                            // Rb = Rb << Rd + 1
-                            push_line(RESET, 'a');
-                            push_line(SUB, 'd');
-                            push_line(DEC, 'a');
-                            push_line(SWAP, 'b');
-                            push_line(SHIFT, 'b');
-                            push_line(SWAP, 'b');
-                            push_line(RESET, 'a');
-
+                        push_line(SUB, 'd');
+                        push_line(DEC, 'a');
+                        push_line(SWAP, 'b');
+                        push_line(SHIFT, 'b');
+                        push_line(SWAP, 'b');
                         push_line(RESET, 'a');
-                        // push_line(ADD, 'd');
-                            // jump_inner_here = instruction_pointer; 
-                            //     push_line(SWAP, 'b'); 
-                            //     push_line(SHIFT, 'e');
-                            //     push_line(SWAP, 'b');  
-                            //     push_line(DEC, 'a');
-                            // push_line(JPOS, - instruction_pointer + jump_inner_here);
-                            // push_line(JZERO, - instruction_pointer + jump_inner_here);
-                            // Rb = Rb << Rd + 1
-                            push_line(RESET, 'a');
-                            push_line(ADD, 'd');
-                            push_line(INC, 'a');
-                            push_line(SWAP, 'b');
-                            push_line(SHIFT, 'b');
-                            push_line(SWAP, 'b');
-                            push_line(RESET, 'a');
+
+                        // Rb = Rb << Rd + 1
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                        push_line(INC, 'a');
+                        push_line(SWAP, 'b');
+                        push_line(SHIFT, 'b');
+                        push_line(SWAP, 'b');
+                        push_line(RESET, 'a');
 
                         push_line(SWAP, 'h');
                         push_line(SUB, 'b');
@@ -499,6 +465,8 @@ void Expression::codegen() {
                 push_line(JPOS, - instruction_pointer + jump_here);
                 push_line(JZERO, - instruction_pointer + jump_here);  
                 
+
+                // naprawa 1
                 push_line(SWAP, 'b');
                 push_line(SUB, 'c');
                 prepare_jump(JNEG);
@@ -544,14 +512,6 @@ void Expression::codegen() {
 
                 push_line(JPOS, - instruction_pointer + jump_here);
 
-                // Pętla odejmowania                      
-                jump_here = instruction_pointer;         
-
-                push_line(INC, 'd');
-                push_line(SHIFT, 'f');
-
-                push_line(JPOS, - instruction_pointer + jump_here);
-
                 // Pętla odejmowania
                 jump_here = instruction_pointer;         
 
@@ -559,14 +519,8 @@ void Expression::codegen() {
                     push_line(RESET, 'h');      
                     push_line(ADD, 'b');        // Ra = B
                     push_line(SWAP, 'h');       // wynik iteracji
-                    
-                        // for (int i = a; i < a; i++) Rh << 1
-                        // Rh << a
-                        // RESET a
-                        // SUB h
 
                     // Rh = Rh >> Rd - 1
-                    int jump_inner_here;
                     push_line(RESET, 'a'); // Ra = Rd (liczba cyfr)
                     push_line(SUB, 'd'); // Ra = Rd (liczba cyfr)
                     push_line(DEC, 'a'); // Ra = Rd (liczba cyfr)
@@ -582,67 +536,38 @@ void Expression::codegen() {
                     prepare_jump(JNEG);      //RA reminder
                         
                         push_line(SWAP, 'h'); //RH reminder
-                        // push_line(RESET, 'a');
-                        // push_line(ADD, 'd');
-                            // jump_inner_here = instruction_pointer; 
-                                // push_line(SWAP, 'h'); 
-                                // push_line(SHIFT, 'e');
-                                // push_line(SWAP, 'h');  
-                                // push_line(DEC, 'a');
-                            // push_line(JPOS, - instruction_pointer + jump_inner_here);
-                            // push_line(JZERO, - instruction_pointer + jump_inner_here);
 
-                            // Rh = Rh << Rd + 1
-                            push_line(RESET, 'a');
-                            push_line(ADD, 'd');
-                            push_line(INC, 'a');
-                            push_line(SWAP, 'h');
-                            push_line(SHIFT, 'h');
-                            push_line(SWAP, 'h');
-                            push_line(RESET, 'a');
+                        // Rh = Rh << Rd + 1
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                        push_line(INC, 'a');
+                        push_line(SWAP, 'h');
+                        push_line(SHIFT, 'h');
+                        push_line(SWAP, 'h');
+                        push_line(RESET, 'a');
 
                         push_line(RESET, 'a');
                         push_line(ADD, 'h');
                         push_line(ADD, 'b');
                         push_line(SWAP, 'h');
 
-
+                        // Rb = Rb >> (Rd + 1)
                         push_line(RESET, 'a');
-                        // push_line(ADD, 'd');
-                            // jump_inner_here = instruction_pointer; 
-                            //     push_line(SWAP, 'b'); 
-                            //     push_line(SHIFT, 'f');
-                            //     push_line(SWAP, 'b');  
-                            //     push_line(DEC, 'a');
-                            // push_line(JPOS, - instruction_pointer + jump_inner_here);
-                            // push_line(JZERO, - instruction_pointer + jump_inner_here);
-
-                            // Rb = Rb << Rd + 1
-                            push_line(RESET, 'a');
-                            push_line(SUB, 'd');
-                            push_line(DEC, 'a');
-                            push_line(SWAP, 'b');
-                            push_line(SHIFT, 'b');
-                            push_line(SWAP, 'b');
-                            push_line(RESET, 'a');
-
+                        push_line(SUB, 'd');
+                        push_line(DEC, 'a');
+                        push_line(SWAP, 'b');
+                        push_line(SHIFT, 'b');
+                        push_line(SWAP, 'b');
                         push_line(RESET, 'a');
-                        // push_line(ADD, 'd');
-                            // jump_inner_here = instruction_pointer; 
-                            //     push_line(SWAP, 'b'); 
-                            //     push_line(SHIFT, 'e');
-                            //     push_line(SWAP, 'b');  
-                            //     push_line(DEC, 'a');
-                            // push_line(JPOS, - instruction_pointer + jump_inner_here);
-                            // push_line(JZERO, - instruction_pointer + jump_inner_here);
-                            // Rb = Rb << Rd + 1
-                            push_line(RESET, 'a');
-                            push_line(ADD, 'd');
-                            push_line(INC, 'a');
-                            push_line(SWAP, 'b');
-                            push_line(SHIFT, 'b');
-                            push_line(SWAP, 'b');
-                            push_line(RESET, 'a');
+
+                        // Rb = Rb << (Rd + 1)
+                        push_line(RESET, 'a');
+                        push_line(ADD, 'd');
+                        push_line(INC, 'a');
+                        push_line(SWAP, 'b');
+                        push_line(SHIFT, 'b');
+                        push_line(SWAP, 'b');
+                        push_line(RESET, 'a');
 
                         push_line(SWAP, 'h');
                         push_line(SUB, 'b');
