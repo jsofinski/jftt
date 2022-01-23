@@ -1,7 +1,7 @@
 ( numbers.imp - liczby )
 VAR
-	a, b, c, t[-6:6], tab[-5:5],  d, e, f, g, h, i, j
-	BEGIN
+	a, b, c, t[-6:6], d, e, f, g, h, i, j, tab[-5:5]
+BEGIN
 	WRITE 0;
 	WRITE 1;
 	WRITE -2;

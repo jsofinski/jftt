@@ -57,6 +57,8 @@
                 indexMap[i] = currentIndex;
                 currentIndex++;
 
+                // strs[fi]
+
                 strs[i+1] = strdup(yytext);
                 indexMap[i+1] = currentIndex;
                 currentIndex++;
@@ -64,9 +66,8 @@
                 for (i64 j = i+2; j < (i + 2 + end - start + 1); j++) {
                     currentIndex++;
                 }
-                currentIndex += 2;
                 // printf("%d: %s\n", i, strs[i]);
-                initArray(i, start, end);
+                initArray(indexMap[i], start, end);
                 return i;
             } else if (strcmp(strs[i], yytext) == 0) {
                 return i;

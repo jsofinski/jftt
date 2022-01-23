@@ -3,6 +3,6 @@ VAR
 BEGIN
     READ x;
     READ y;
-    z ASSIGN x DIV y;
+    z ASSIGN x MOD y;
     WRITE z;
 END

@@ -376,7 +376,7 @@ void Expression::codegen() {
 
                 push_line(RESET, 'g'); // WYNIK
 
-                // obliczanie log2(Rb) - liczba cyfr -> leci do Rd
+                // obliczanie log2(Rb) +1 - liczba cyfr +1 -> leci do Rd
                 push_line(RESET, 'a');
                 push_line(RESET, 'd');
 
@@ -388,6 +388,7 @@ void Expression::codegen() {
                 push_line(SHIFT, 'f');
 
                 push_line(JPOS, - instruction_pointer + jump_here);
+                push_line(INC, 'd'); // NOWA LINIA
 
                 // Pętla odejmowania
                 jump_here = instruction_pointer;         
@@ -397,10 +398,9 @@ void Expression::codegen() {
                     push_line(ADD, 'b');        // Ra = B
                     push_line(SWAP, 'h');       // wynik iteracji
                     
-                    // Rh = Rh >> Rd - 1
+                    // Rh = Rh >> Rd
                     push_line(RESET, 'a'); // Ra = Rd (liczba cyfr)
                     push_line(SUB, 'd'); // Ra = Rd (liczba cyfr)
-                    push_line(DEC, 'a'); // Ra = Rd (liczba cyfr)
                     push_line(SWAP, 'h');
                     push_line(SHIFT, 'h');
                     push_line(SWAP, 'h');
@@ -414,10 +414,9 @@ void Expression::codegen() {
                         
                         push_line(SWAP, 'h'); //RH reminder
 
-                        //  Rh = Rh << Rd - 1
+                        //  Rh = Rh << Rd
                         push_line(RESET, 'a');
                         push_line(ADD, 'd');
-                        push_line(INC, 'a');
                         push_line(SWAP, 'h');
                         push_line(SHIFT, 'h');
                         push_line(SWAP, 'h');
@@ -429,19 +428,17 @@ void Expression::codegen() {
                         push_line(ADD, 'b');
                         push_line(SWAP, 'h');
 
-                        // Rb = Rb >> Rd + 1
+                        // Rb = Rb >> Rd
                         push_line(RESET, 'a');
                         push_line(SUB, 'd');
-                        push_line(DEC, 'a');
                         push_line(SWAP, 'b');
                         push_line(SHIFT, 'b');
                         push_line(SWAP, 'b');
                         push_line(RESET, 'a');
 
-                        // Rb = Rb << Rd + 1
+                        // Rb = Rb << Rd
                         push_line(RESET, 'a');
                         push_line(ADD, 'd');
-                        push_line(INC, 'a');
                         push_line(SWAP, 'b');
                         push_line(SHIFT, 'b');
                         push_line(SWAP, 'b');
@@ -462,6 +459,7 @@ void Expression::codegen() {
                     push_line(DEC, 'd');    // Rd - liczba potrzebnych przesuniec
                     push_line(RESET, 'a');
                     push_line(ADD, 'd');
+                    push_line(DEC, 'a');
                 push_line(JPOS, - instruction_pointer + jump_here);
                 push_line(JZERO, - instruction_pointer + jump_here);  
                 
@@ -472,7 +470,6 @@ void Expression::codegen() {
                 prepare_jump(JNEG);
                     push_line(INC, 'g');
                 backfill_jump();
-                // push_line(PUT, 0);
                 push_line(SWAP, 'b');
                 
                 push_line(SWAP, 'g');   
@@ -824,16 +821,18 @@ void Identifier::codegenGetIndex() {
         set_register_a_to_value(id);
     } else {        
         value->codegen();                                   // Ra = -4                    
-
-        push_line(SWAP, 'g'); // Rh = start index           Rg = -4 Ra = 0
+            
+        push_line(SWAP, 'g'); // Rh = start index           Rg = -4 Ra = 2137
         set_register_a_to_value(id); //                     Ra = 32
         push_line(SWAP, 'h'); // True memory index          Ra = 0 Rh = 32 Rg = -4  
         push_line(LOAD, 'h'); // Ra = start index           Ra = -5 Rh = 32 Rg = -4
         push_line(SWAP, 'h'); // True memory index          Ra = 32 Rh = -5 Rg = -4
         push_line(INC, 'a'); // skip start value            Ra = 33
         push_line(INC, 'a'); // skip end value              Ra = 34
-        push_line(ADD, 'g'); //                             Ra = 28
+        push_line(ADD, 'g'); //                             Ra = 29
         push_line(SUB, 'h'); //                             Ra = 33   
+        // tab[4]
+        // Ra = indexMap( tab ) + 2 + 4(offset) - -5
 
         // push_line(INC, 'a'); // skip start value            Ra = -4
         // push_line(INC, 'a'); // skip end value              Ra = -3
