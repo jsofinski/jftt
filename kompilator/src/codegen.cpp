@@ -299,11 +299,14 @@ void Expression::codegen() {
             push_line(SUB, 'b');
         break; }
         case eTIMES: {
+            //      Rejestr h -> flaga ujemnego wyniku; Jeśli 0 to dodatni
+            push_line(RESET, 'h');
             push_line(RESET, 'e');
             push_line(RESET, 'f');
             push_line(INC, 'e');
             push_line(DEC, 'f');
 
+            
             /*
                 Re = 1 do shiftowania
                 Rf = -1 do shiftowania
@@ -315,10 +318,28 @@ void Expression::codegen() {
             */
 
             cvalue->codegen();
+            // zmiana flagi h na 1 jeśli ujemne
+            prepare_jump(JPOS);
+                push_line(SWAP, 'c');
+                push_line(RESET, 'a');
+                push_line(SUB, 'c');
+                push_line(INC, 'h');
+            backfill_jump();          
             push_line(SWAP, 'c');
+
             bvalue->codegen();
+            // zmiana flagi h z 1 na 0 lub z 0 na 1 jesli ujemne
+            prepare_jump(JPOS);
+                push_line(SWAP, 'b');
+                push_line(RESET, 'a');
+                push_line(SUB, 'b');
+                push_line(DEC, 'h');
+            backfill_jump();      
             push_line(SWAP, 'b');
+
+
             push_line(RESET, 'd');
+
 
             int jump_to_start = instruction_pointer;
 
@@ -354,23 +375,45 @@ void Expression::codegen() {
             // jezeli Rb == 0, koniec iteracji, w Rd jest wynik
             push_line(JPOS, - instruction_pointer + jump_to_start);
             push_line(JNEG, - instruction_pointer + jump_to_start);
+            
+            push_line(SWAP, 'h');
+            prepare_jump(JZERO);
+                push_line(RESET, 'a');
+                push_line(SUB, 'd');
+                push_line(SWAP, 'd');
+            backfill_jump();
+
             push_line(SWAP, 'd');
+
+
         break; }
         case eDIV: { 
             push_line(RESET, 'e');
             push_line(RESET, 'f');
             push_line(INC, 'e');
-            push_line(DEC, 'f');
 
-            /* Re = 1 do shiftowania
-               Rf = -1 do shiftowania
+            /* Re = 1/-1 do shiftowania
+                Rf = flag, tak jak w mnozeniu
             */
             cvalue->codegen();
+            // zmiana flagi f na 1 jeśli ujemne
+            prepare_jump(JPOS);
+                push_line(SWAP, 'c');
+                push_line(RESET, 'a');
+                push_line(SUB, 'c'); 
+                push_line(INC, 'f');
+            backfill_jump();        
 
             prepare_jump(JZERO); // if c != 0;
 
                 push_line(SWAP, 'c');
                 bvalue->codegen();
+                prepare_jump(JPOS);
+                    push_line(SWAP, 'b');
+                    push_line(RESET, 'a');
+                    push_line(SUB, 'b');
+                    push_line(DEC, 'f');
+                backfill_jump();  
                 push_line(SWAP, 'b');
                 push_line(RESET, 'd');
 
@@ -385,7 +428,9 @@ void Expression::codegen() {
                 int jump_here = instruction_pointer;
 
                 push_line(INC, 'd');
-                push_line(SHIFT, 'f');
+                push_line(RESET, 'e');
+                push_line(DEC, 'e');
+                push_line(SHIFT, 'e');
 
                 push_line(JPOS, - instruction_pointer + jump_here);
                 push_line(INC, 'd'); // NOWA LINIA
@@ -452,7 +497,9 @@ void Expression::codegen() {
                     backfill_jump();
                     
                     push_line(SWAP, 'g');      
-                        push_line(SHIFT, 'e');    
+                        push_line(RESET, 'e');
+                        push_line(INC, 'e');
+                        push_line(SHIFT, 'e');
                     push_line(SWAP, 'g');      
                     push_line(SWAP, 'h');                   
 
@@ -471,6 +518,14 @@ void Expression::codegen() {
                     push_line(INC, 'g');
                 backfill_jump();
                 push_line(SWAP, 'b');
+
+                // sprawdzenie flagi i ewentualna naprawa znaku
+                push_line(SWAP, 'f');
+                prepare_jump(JZERO);
+                    push_line(RESET, 'a');
+                    push_line(SUB, 'g');
+                    push_line(SWAP, 'g');
+                backfill_jump();
                 
                 push_line(SWAP, 'g');   
             backfill_jump();
@@ -479,17 +534,31 @@ void Expression::codegen() {
             push_line(RESET, 'e');
             push_line(RESET, 'f');
             push_line(INC, 'e');
-            push_line(DEC, 'f');
 
             /* Re = 1 do shiftowania
-               Rf = -1 do shiftowania
+                f: -3, oba ujemne zmiana znaku
+                f: -2, ujemne tylko c, zmiana znaku i poprawa
+                f: -1, ujemne tylko b, poprawa
             */
             cvalue->codegen();
+            prepare_jump(JPOS);
+                push_line(SWAP, 'c');
+                push_line(RESET, 'a');
+                push_line(SUB, 'c'); 
+                push_line(DEC, 'f');
+                push_line(DEC, 'f');
+            backfill_jump();        
 
             prepare_jump(JZERO); // if c == 0;
 
                 push_line(SWAP, 'c');
                 bvalue->codegen();
+                prepare_jump(JPOS);
+                    push_line(SWAP, 'b');
+                    push_line(RESET, 'a');
+                    push_line(SUB, 'b');
+                    push_line(DEC, 'f');
+                backfill_jump();  
                 push_line(SWAP, 'b');
                 push_line(RESET, 'd');
 
@@ -505,7 +574,9 @@ void Expression::codegen() {
                 int jump_here = instruction_pointer;
 
                 push_line(INC, 'd');
-                push_line(SHIFT, 'f');
+                push_line(RESET, 'e');
+                push_line(DEC, 'e');
+                push_line(SHIFT, 'e');
 
                 push_line(JPOS, - instruction_pointer + jump_here);
 
@@ -573,8 +644,10 @@ void Expression::codegen() {
                         push_line(INC, 'g');
                     backfill_jump();
                     
-                    push_line(SWAP, 'g');      
-                        push_line(SHIFT, 'e');    
+                    push_line(SWAP, 'g');        
+                        push_line(RESET, 'e');
+                        push_line(INC, 'e');
+                        push_line(SHIFT, 'e');
                     push_line(SWAP, 'g');      
                     push_line(SWAP, 'h');                   
 
@@ -584,8 +657,6 @@ void Expression::codegen() {
                 push_line(JPOS, - instruction_pointer + jump_here);
                 push_line(JZERO, - instruction_pointer + jump_here);  
                 
-
-
 
                 push_line(RESET, 'a');
                 push_line(RESET, 'g');  
@@ -601,6 +672,44 @@ void Expression::codegen() {
                 backfill_jump();
                 backfill_jump();
 
+                /* 
+                    f: -3, oba ujemne zmiana znaku
+                    f: -2, ujemne tylko c, zmiana znaku i poprawa
+                    f: -1, ujemne tylko b, poprawa
+                */  
+                // b i c dodatnie
+                push_line(SWAP, 'f');
+                prepare_jump(JZERO);
+                    // b ujemne
+                    push_line(SWAP, 'f');
+                    // poprawa
+                    push_line(SWAP, 'c');
+                    push_line(SUB, 'c');
+                    
+                    push_line(INC, 'f');
+                    push_line(SWAP, 'f');
+                    prepare_jump(JZERO);
+                        push_line(SWAP, 'f');
+                        // c ujemne
+                        // zmiana znaku
+                        push_line(SWAP, 'b');
+                        push_line(RESET, 'a');
+                        push_line(SUB, 'b');
+
+                        // poprawa
+                        //oba ujemne
+                        push_line(INC, 'f');
+                        push_line(SWAP, 'f');
+                        prepare_jump(JZERO);
+                            push_line(SWAP, 'f');
+                            push_line(RESET, 'a');
+                            push_line(SUB, 'c');
+                                // zmiana znaku
+                            push_line(SWAP, 'f');
+                            backfill_jump();
+                    backfill_jump();
+                backfill_jump();
+                push_line(SWAP, 'f');
             backfill_jump();
         break; }
     }      
