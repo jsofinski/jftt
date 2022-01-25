@@ -3,7 +3,7 @@
 typedef long long i64;
 
 void print_lines();
-void initArray(int id, i64 start, i64 end);
+void initArray(i64 id, i64 start, i64 end);
 void addVariable(int id);
 void assertVariableExists(int id);
 

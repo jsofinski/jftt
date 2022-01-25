@@ -184,7 +184,7 @@ void push_jump_to(int type, int jump_to) {
     }
 }
 
-void initArray(int id, i64 start, i64 end) {
+void initArray(i64 id, i64 start, i64 end) {
     // printf("initarray \n");
     // printf("%d \n", id);
     // printf("%d \n", start);
@@ -299,43 +299,42 @@ void Expression::codegen() {
             push_line(SUB, 'b');
         break; }
         case eTIMES: {
-            //      Rejestr h -> flaga ujemnego wyniku; Jeśli 0 to dodatni
-            push_line(RESET, 'h');
+            //      Rejestr f -> flaga ujemnego wyniku; Jeśli 0 to dodatni
             push_line(RESET, 'e');
             push_line(RESET, 'f');
             push_line(INC, 'e');
-            push_line(DEC, 'f');
 
-            
             /*
-                Re = 1 do shiftowania
-                Rf = -1 do shiftowania
-
+                Re = 1/-1 do shiftowania
+                
                 Rd = wynik
                 Rc = prawa liczba
                 Rb = lewa liczba (shiftowana w prawo)
                 Ra = rejestr roboczy
             */
 
-            cvalue->codegen();
+            cvalue->codegen();  
             // zmiana flagi h na 1 jeśli ujemne
             prepare_jump(JPOS);
                 push_line(SWAP, 'c');
                 push_line(RESET, 'a');
                 push_line(SUB, 'c');
-                push_line(INC, 'h');
+                push_line(INC, 'f');
             backfill_jump();          
             push_line(SWAP, 'c');
 
             bvalue->codegen();
-            // zmiana flagi h z 1 na 0 lub z 0 na 1 jesli ujemne
+            // zmiana flagi h z 1 na 0 lub z 0 na -1 jesli ujemne
             prepare_jump(JPOS);
                 push_line(SWAP, 'b');
                 push_line(RESET, 'a');
                 push_line(SUB, 'b');
-                push_line(DEC, 'h');
+                push_line(DEC, 'f');
             backfill_jump();      
             push_line(SWAP, 'b');
+
+
+            // push_line(RESET, 'h');      // TODO TU GDZIES JEST BLAD W MNOZENIU!! ZŁE WYNIKI
 
 
             push_line(RESET, 'd');
@@ -346,8 +345,12 @@ void Expression::codegen() {
             // testuj najmniej znaczacy bit Rb
             push_line(RESET, 'a');
             push_line(ADD, 'b');
-
-            push_line(SHIFT, 'f');
+            
+            push_line(RESET, 'e');
+            push_line(DEC, 'e');
+            push_line(SHIFT, 'e');
+            push_line(INC, 'e');
+            push_line(INC, 'e');
             push_line(SHIFT, 'e');
             push_line(SUB, 'b');
             // Ra to teraz -1 albo 0
@@ -362,10 +365,14 @@ void Expression::codegen() {
 
             // przesun Rb o 1 w prawo
             push_line(SWAP, 'b');
-            push_line(SHIFT, 'f');
+            push_line(RESET, 'e');
+            push_line(DEC, 'e');
+            push_line(SHIFT, 'e');
             push_line(SWAP, 'b');
             // przesun Rc o 1 w lewo
             push_line(SWAP, 'c');
+            push_line(RESET, 'e');
+            push_line(INC, 'e');
             push_line(SHIFT, 'e');
             push_line(SWAP, 'c');
 
@@ -376,7 +383,7 @@ void Expression::codegen() {
             push_line(JPOS, - instruction_pointer + jump_to_start);
             push_line(JNEG, - instruction_pointer + jump_to_start);
             
-            push_line(SWAP, 'h');
+            push_line(SWAP, 'f');
             prepare_jump(JZERO);
                 push_line(RESET, 'a');
                 push_line(SUB, 'd');
