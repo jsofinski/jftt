@@ -8,8 +8,12 @@
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
 typedef long long i64;
+int arrayVariablesNumber = 0;
+int arrayVariables[100] = {};
 int variablesNumber = 0;
 int variables[100] = {};
+int initializedVariablesNumber = 0;
+int initializedVariables[100] = {};
 int iteratorsNumber = 0;
 int interators[100] = {};
 int banIteratorsNumber = 0;
@@ -184,12 +188,84 @@ void push_jump_to(int type, int jump_to) {
     }
 }
 
+void addVariable(int id) {
+    for (int i = 0; i < variablesNumber; i++) {
+        if (variables[i] == id) {
+            printf("%d\n",id);
+            error("Zmienna juz zadeklarowana!");
+        }
+    }
+    // printf("cyk:%d\n", id);
+    variablesNumber++;
+    variables[variablesNumber] = id;
+}
+
+void initVariable(int id) {
+    for (int i = 0; i < initializedVariablesNumber; i++) {
+        if (initializedVariables[i] == id) {
+            return;
+        }
+    }
+    initializedVariablesNumber++;
+    initializedVariables[initializedVariablesNumber] = id;
+}
+
+void addArrayVariable(int id) {
+    for (int i = 0; i < arrayVariablesNumber; i++) {
+        if (arrayVariables[i] == id) {
+            error("Tablica juz zadeklarowana!");
+        }
+    }
+    // printf("cyk:%d\n", id);
+    arrayVariablesNumber++;
+    arrayVariables[arrayVariablesNumber] = id;
+}
+
+void assertVariableExists(int id) {
+    int exists = 0;
+    for (int i = 0; i <= variablesNumber; i++) {
+        if (variables[i] == id) {
+            exists = 1;
+        }
+    }
+    if (!exists) {
+        printf("%d\n", id);
+        error("Zmienna nie zostala zadeklarowana!");
+    }
+}
+
+void assertArrayVariableExists(int id) {
+    int exists = 0;
+    for (int i = 0; i <= arrayVariablesNumber; i++) {
+        if (arrayVariables[i] == id) {
+            exists = 1;
+        }
+    }
+    if (!exists) {
+        error("Tablica nie zostala zadeklarowana!");
+    }
+}
+
+void assertVariableInitialized(int id) {
+    int exists = 0;
+    for (int i = 0; i < initializedVariablesNumber; i++) {
+        if (initializedVariables[i] == id) {
+            exists = 1;
+        }
+    }
+    if (!exists) {
+        printf("Zmienna: %d\n", id);
+        error("Zmienna nie zostala zainicjalizowana!");
+    }
+}
+
+
 void initArray(i64 id, i64 start, i64 end) {
     // printf("initarray \n");
     // printf("%d \n", id);
     // printf("%d \n", start);
     // printf("%d \n", end);
-
+    addArrayVariable(id);
     set_register_a_to_value(id); // Ra = &id
     push_line(SWAP, 'g'); // value <=> &id  // P(Rg) => index start
     set_register_a_to_value(start);
@@ -201,29 +277,6 @@ void initArray(i64 id, i64 start, i64 end) {
     push_line(STORE, 'g'); // P(Rg) <= Ra
 }
 
-void addVariable(int id) {
-    for (int i = 0; i < variablesNumber; i++) {
-        if (variables[i] == id) {
-            error("Zmienna juz zadeklarowana!");
-        }
-    }
-    // printf("cyk:%d\n", id);
-    variablesNumber++;
-    variables[variablesNumber] = id;
-}
-
-void assertVariableExists(int id) {
-    int exists = 0;
-    printf("assert: %d\n", id);
-    for (int i = 0; i <= variablesNumber; i++) {
-        if (variables[i] == id) {
-            exists = 1;
-        }
-    }
-    if (!exists) {
-        error("Zmienna nie zostala zadeklarowana!");
-    }
-}
 
 
 
@@ -250,6 +303,7 @@ Assign::Assign(Identifier* id, Node* expression)
 {};
 
 void Assign::codegen() {
+    initVariable(id->id);
     // iterator check
     for (int i = 0; i < iteratorsNumber; i++) {
         if (id->id == interators[i]) {
@@ -285,6 +339,16 @@ Expression::Expression(Node* bvalue, int symbol, Node* cvalue)
 {};
 
 void Expression::codegen() {
+    if (typeid(bvalue) == typeid(Identifier)) {
+        // assertVariableExists(dynamic_cast<Identifier*>(bvalue)->id);
+        // assertVariableInitialized(dynamic_cast<Identifier*>(bvalue)->id);
+
+    }
+    if (typeid(cvalue) == typeid(Identifier)) {
+        // assertVariableExists(dynamic_cast<Identifier*>(cvalue)->id);
+        // assertVariableInitialized(dynamic_cast<Identifier*>(cvalue)->id);
+
+    }
     switch(symbol) {
         case ePLUS: {
             cvalue->codegen();
@@ -399,8 +463,10 @@ void Expression::codegen() {
             push_line(RESET, 'f');
             push_line(INC, 'e');
 
+            push_line(RESET, 'g'); // WYNIK
+            
             /* Re = 1/-1 do shiftowania
-                Rf = flag, tak jak w mnozeniu
+                Rf = flag, tak jak w mnozeniu, if -1 to poprawic
             */
             cvalue->codegen();
             // zmiana flagi f na 1 jeśli ujemne
@@ -419,12 +485,12 @@ void Expression::codegen() {
                     push_line(SWAP, 'b');
                     push_line(RESET, 'a');
                     push_line(SUB, 'b');
-                    push_line(DEC, 'f');
+                    // push_line(DEC, 'f');
+                    push_line(INC, 'f');
                 backfill_jump();  
                 push_line(SWAP, 'b');
                 push_line(RESET, 'd');
 
-                push_line(RESET, 'g'); // WYNIK
 
                 // obliczanie log2(Rb) +1 - liczba cyfr +1 -> leci do Rd
                 push_line(RESET, 'a');
@@ -524,15 +590,44 @@ void Expression::codegen() {
                 prepare_jump(JNEG);
                     push_line(INC, 'g');
                 backfill_jump();
+                push_line(ADD, 'c');
                 push_line(SWAP, 'b');
+                
+
+                // prepare_jump(JZERO);
+                // prepare_jump(JPOS);
+                //     push_line(INC, 'g');
+                // backfill_jump();
+                // backfill_jump();
 
                 // sprawdzenie flagi i ewentualna naprawa znaku
                 push_line(SWAP, 'f');
                 prepare_jump(JZERO);
+                    push_line(SWAP, 'f');
+
+                    push_line(SWAP, 'b');
+                    prepare_jump(JZERO);
+                        push_line(INC, 'g');
+                    backfill_jump();
+                    push_line(SWAP, 'b');
+
+                    push_line(DEC, 'f');
                     push_line(RESET, 'a');
                     push_line(SUB, 'g');
                     push_line(SWAP, 'g');
+                    push_line(SWAP, 'f');
+                    prepare_jump(JZERO);
+                        push_line(SWAP, 'b');
+                        prepare_jump(JZERO);
+                            push_line(INC, 'g');
+                        backfill_jump();
+                        push_line(SWAP, 'b');
+                        push_line(RESET, 'a');
+                        push_line(SUB, 'g');
+                        push_line(SWAP, 'g');                        
+                    backfill_jump();
                 backfill_jump();
+                
                 
                 push_line(SWAP, 'g');   
             backfill_jump();
@@ -685,6 +780,8 @@ void Expression::codegen() {
                     f: -1, ujemne tylko b, poprawa
                 */  
                 // b i c dodatnie
+                prepare_jump(JZERO);
+
                 push_line(SWAP, 'f');
                 prepare_jump(JZERO);
                     // b ujemne
@@ -717,6 +814,8 @@ void Expression::codegen() {
                     backfill_jump();
                 backfill_jump();
                 push_line(SWAP, 'f');
+
+                backfill_jump();
             backfill_jump();
         break; }
     }      
@@ -892,6 +991,9 @@ void For::codegen() {
 Read::Read(Identifier* identifier) : identifier{identifier} {};
     
 void Read::codegen() {
+    // assertVariableExists(identifier->id);
+    initVariable(identifier->id); 
+
     identifier->codegenGetIndex();
     push_line(SWAP, 'b'); // P(Rb) = Ra
     push_line(GET, 0); // Ra = z klawiatury
@@ -899,10 +1001,13 @@ void Read::codegen() {
 }
 
 Write::Write(i64 intval) : value{NULL}, intval(intval) {};
-Write::Write(Node* value) : value{value} {};
+Write::Write(Identifier* value) : value{value} {};
 
-void Write::codegen() {      
+void Write::codegen() {    
     if (typeid(value) == typeid(Identifier)) {
+        // assertVariableExists(dynamic_cast<Identifier*>(value)->id);
+        // assertVariableInitialized(dynamic_cast<Identifier*>(value)->id);
+
         for (int i = 0; i < banIteratorsNumber; i++) {
             if (dynamic_cast<Identifier*>(value)->id == banIteratos[i]) {
                 error("Error, zmiana wartosci iteratora poza petla!");
@@ -930,12 +1035,21 @@ Identifier::Identifier(i64 id, Node* value) : id(id), value(value) {};
 void Identifier::codegen() {  
     codegenGetIndex();
     push_line(LOAD, 'a');
+    // assertVariableExists(id);
+    // assertVariableInitialized(id);
 }
 
 void Identifier::codegenGetIndex() {  
     if (value == NULL) {
+        // for (int i = 0; i <= arrayVariablesNumber; i++) {
+        //     if (arrayVariables[i] == id) {
+        //         printf("%d\n", id);
+        //         error("Niewłaściwe użycie zmiennej tablicowej!");
+        //     }
+        // }
         set_register_a_to_value(id);
     } else {        
+        // assertArrayVariableExists(id);
         value->codegen();                                   // Ra = -4                    
             
         push_line(SWAP, 'g'); // Rh = start index           Rg = -4 Ra = 2137

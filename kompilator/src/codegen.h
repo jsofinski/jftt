@@ -1,11 +1,13 @@
 #pragma once
 
 typedef long long i64;
-
+void error(char* reason);
 void print_lines();
 void initArray(i64 id, i64 start, i64 end);
 void addVariable(int id);
+void initVariable(int id);
 void assertVariableExists(int id);
+void assertVariableInitialized(int id);
 
 class Node {
 public:
@@ -115,13 +117,13 @@ public:
 };
 class Write : public Node {
 public:
-    Write(Node* value);
+    Write(Identifier* value);
     Write(i64 intval);
 
     virtual void codegen();
 private:
     i64 intval;
-    Node* value;
+    Identifier* value;
 };
 class Num : public Node {
 public:

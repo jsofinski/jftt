@@ -25,6 +25,7 @@
         }
         return -1;
     }
+
     int pushStrs() {
         for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
@@ -35,6 +36,7 @@
         }
         return 0;
     }
+    
     i64 arrayDeclare(char *yytext) {
         char* name = strtok(yytext, "[");
         // printf("name: %s\n", name);
@@ -88,7 +90,7 @@
 %}
 
 DIGIT [0-9]
-ID [a-z][a-z0-9]*
+ID [a-z]*
 
 %%
 "("[^()]*")"        {}

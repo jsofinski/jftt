@@ -1,6 +1,6 @@
-# ./gram ./tests/gebala/program0.imp > test.mr 
+./gram ./tests/gebala/program0.imp > test.mr  
 # ./gram ./tests/gebala/program1.imp > test.mr 
-./gram ./tests/gebala/program2.imp > test.mr 
+# ./gram ./tests/gebala/program2.imp > test.mr 
 # ./gram ./tests/gebala/0-div-mod.imp > test.mr 
 # ./gram ./tests/gebala/1-numbers.imp > test.mr 
 # ./gram ./tests/gebala/2-fib.imp > test.mr 
@@ -12,7 +12,7 @@
 # ./gram ./tests/gebala/8-for.imp > test.mr 
 # ./gram ./tests/gebala/9-sort.imp > test.mr 
 
-
+# ./gram ./tests/gebala/div-mod.imp > test.mr 
 
 
 
@@ -26,5 +26,5 @@
 
 
 
-./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
-# ./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
+# ./vm/maszyna_wirtualna/maszyna-wirtualna test.mr
+./vm/maszyna_wirtualna/maszyna-wirtualna-cln test.mr
