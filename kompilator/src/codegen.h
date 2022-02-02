@@ -2,7 +2,7 @@
 
 typedef long long i64;
 void error(char* reason);
-void print_lines();
+void print_lines(char* outputFileName);
 void initArray(i64 id, i64 start, i64 end);
 void addVariable(int id);
 void initVariable(int id);

@@ -82,7 +82,7 @@
             if (strs[i] == NULL) {
                 break;
             } else {
-                printf("%s %d\n", strs[i], indexMap[i]);
+                printf("%s %lld\n", strs[i], indexMap[i]);
             }
 
         }

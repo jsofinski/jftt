@@ -45,25 +45,26 @@ void push_line(VMInstruction op, int arg) {
 
 char *names[] = {"GET", "PUT", "LOAD", "STORE", "ADD", "SUB", "SHIFT", "SWAP", "RESET", "INC", "DEC", "JUMP", "JPOS", "JZERO", "JNEG", "HALT"};
 
-void print_lines() {
+void print_lines(char* outputFileName) {
+    FILE *outputFile = fopen(outputFileName, "w");
     for (int i = 0; i < instruction_pointer; i++) {
         if (instructions[i].op == GET || 
                 instructions[i].op == PUT ||
                 instructions[i].op == HALT) {
-            printf("%s", names[instructions[i].op]);
+            fprintf(outputFile, "%s", names[instructions[i].op]);
         } else if (instructions[i].op == JZERO || 
                 instructions[i].op == JPOS ||
                 instructions[i].op == JNEG ||
                 instructions[i].op == JUMP) {
-            printf("%s %lld", names[instructions[i].op], instructions[i].arg);
+            fprintf(outputFile, "%s %lld", names[instructions[i].op], instructions[i].arg);
         } else {
-            printf("%s %c", names[instructions[i].op], (int) instructions[i].arg);
+            fprintf(outputFile, "%s %c", names[instructions[i].op], (int) instructions[i].arg);
         }
 
         if(instructions[i].comment != NULL) {
-            printf("\t (%s)", instructions[i].comment);
+            fprintf(outputFile, "\t (%s)", instructions[i].comment);
         }
-        printf("\n");
+        fprintf(outputFile, "\n");
     }
 }
 

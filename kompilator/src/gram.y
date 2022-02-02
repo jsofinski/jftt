@@ -115,7 +115,8 @@ identifier: PIDENTIFIER             { $$ = new Identifier($1); }
 %%
 
 int yyerror(char *s) {
-    printf("%s\n", s);
+    error(s);
+    /* printf("%s\n", s); */
     return 0;
 }
 
@@ -124,7 +125,7 @@ int main(int argc, char *argv[]) {
 
     extern FILE *yyin;
 
-    yyin =  fopen(argv[1], "r");
+    yyin = fopen(argv[1], "r");
     if (!yyin) {
         printf("Nie można otworzyć pliku %s\n", argv[1]);
         return -1;
@@ -135,7 +136,7 @@ int main(int argc, char *argv[]) {
 
     ASTroot->codegen();
 
-    print_lines();
+    print_lines(argv[2]);
 
     return 0;
 }
