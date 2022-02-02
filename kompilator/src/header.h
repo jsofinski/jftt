@@ -1,18 +1,6 @@
 #ifndef HEADER_FILE
 #define HEADER_FILE
 
-int plus(int value);
-int minus(int value);
-int times(int value);
-int divide(int value);
-int mod(int value);
-int eq(int value);
-int neq(int value);
-int geq(int value);
-int leq(int value);
-int ge(int value);
-int le(int value);
-
 typedef enum {
     cEQ,
     cNEQ,

@@ -27,9 +27,10 @@
     }
 
     int pushStrs() {
+        char* itrName = (char *) "ABCiteratorXYZ";
         for(i64 i = 0; i < size; i++) {
             if (strs[i] == NULL) {
-                strs[i+1] = "ABCiteratorXYZ"; 
+                strs[i+1] = itrName; 
                 currentIndex++;
                 return 0;
             }
@@ -133,6 +134,8 @@ GEQ             { yylval.intval = GEQ; return(GEQ); }
 .               { return yytext[0]; }
 %%
 
-int yywrap(void){}
+int yywrap(void){
+    return 1;
+}
 // {ID}"["{DIGIT}+"]"                      { yylval.intval = arrayDeclare(yytext); return(PIDENTIFIER); printf("TABLICA [num]\n"); }
 // {ID}"["{ID}"]"                          { yylval.intval = arrayDeclare(yytext); return(PIDENTIFIER); printf("TABLICA [id]\n"); }

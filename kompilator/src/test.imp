@@ -1,8 +1,0 @@
-VAR
-    x, y, z
-BEGIN
-    READ x;
-    READ y;
-    z ASSIGN x MOD y;
-    WRITE z;
-END
